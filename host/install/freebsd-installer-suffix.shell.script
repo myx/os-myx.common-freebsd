@@ -1,0 +1,9 @@
+
+echo Installer script finished. >&2
+
+####
+##  
+##    Now press: CTRL+D to proceed with installation of '$$$-PKG-NAME-$$$'
+##  
+####
+

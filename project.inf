@@ -1,0 +1,9 @@
+Name: myx.os-freebsd
+Requires: 
+Augments: 
+Suggests: 
+Declares: 
+Provides:	os.any \
+			os.unix \
+			os.freebsd \
+			build.freebsd-installer:build-tool
