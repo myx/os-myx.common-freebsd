@@ -1,4 +1,0 @@
-Type: build-tool
-Name: build.freebsd-installer
-Class: ru.myx.distro.make.FreebsdInstallerBuilder
-Requires: 

@@ -9,8 +9,7 @@
 # on the target machine under the 'root' user, paste whole text from this file, then press CTRL+D.
 #
 
-
-echo 'myx.common BSD Installer started...'
+echo "myx.common FreeBSD Installer started..." >&2
 
 #
 # Check user
