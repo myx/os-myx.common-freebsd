@@ -17,9 +17,7 @@ echo 'myx.common BSD Installer started...'
 #
 test `id -u` != 0 && echo 'ERROR: Must be root!' && exit 1
 
-PKG_PREFIX=${PKG_PREFIX-/usr/local}
-
-fetch https://github.com/myx/os-myx.common-freebsd/archive/master.zip -o - | unzip -u - 'host/tarball/*' -d "/usr/local/"
+fetch https://github.com/myx/os-myx.common-freebsd/archive/master.zip -o - | tar zxvf - --cd "/usr/local/" --include "*/host/tarball/*" --strip-components 3
 
 MYX_COMMON_COMMAND="/usr/local/bin/myx.common"
 chown root:wheel "$MYX_COMMON_COMMAND"
