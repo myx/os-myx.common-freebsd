@@ -19,7 +19,8 @@ sysrc ntpdate_flags="-b pool.ntp.org europe.pool.ntp.org time.euro.apple.com"
 
 pkg install -y sudo bash nano screen curl postfix metamail rsync rlwrap elinks xtail xmlstarlet ncdu tinc mtr-nox11 p5-ack smartmontools cpuflags ipcalc trafshow host-setup sysrc openjdk8 bind911
 
-fetch http://myx.ru/distro/farm-general/myx.common/install-bsd.sh -o - | sh -e
+# fetch http://myx.ru/distro/farm-general/myx.common/install-bsd.sh -o - | sh -e
+fetch https://raw.githubusercontent.com/myx/os-myx.common-freebsd/master/sh-scripts/install-myx.common-freebsd.sh -o - | sh -e
 
 myx.common lib/replaceLine /usr/local/etc/sudoers "# %wheel ALL=(ALL) ALL" "%wheel ALL=(ALL) ALL"
 
