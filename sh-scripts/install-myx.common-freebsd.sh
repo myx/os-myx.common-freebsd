@@ -27,9 +27,9 @@ MYX_COMMON_DIR="/usr/local/share/myx.common"
 chown -R root:wheel "$MYX_COMMON_DIR/bin"
 chmod -R 750 "$MYX_COMMON_DIR/bin"
 
-ETC_DIR="/usr/local/etc"
-chown root:wheel "$ETC_DIR/periodic/daily/403.myx.common"
-chmod 555 "$ETC_DIR/periodic/daily/403.myx.common"
+# ETC_DIR="/usr/local/etc"
+# chown root:wheel "$ETC_DIR/periodic/daily/403.myx.common"
+# chmod 555 "$ETC_DIR/periodic/daily/403.myx.common"
 
 # exec "$MYX_COMMON_DIR/bin/reinstall"
 
