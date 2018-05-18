@@ -1,30 +1,42 @@
-#/bin/sh
+#!/bin/sh -e
 
-####
-##
-## To execute this as a script, run:
-##		sh -c 'eval "`cat`"'
-## on the target machine, paste whole text from this file, then press CTRL+D.
-##
-####
+# There are two ways:
+#
+# 1) fetch http://myx.ru/distro/farm-general/myx.common/install-bsd.sh -o - | sh
+# or
+# 2) To execute this as a script, run:
+#		sh -c 'eval "`cat`"'
+# on the target machine under the 'root' user, paste whole text from this file, then press CTRL+D.
+#
 
-set -e
-set -x
 
-echo Initializing installer script  >&2
+echo 'myx.common BSD Installer started...'
 
 #
 # Check user
 #
 test `id -u` != 0 && echo 'ERROR: Must be root!' && exit 1
 
-#
-# Upgrade the system
-#
-PAGER=cat freebsd-update fetch install
-pkg upgrade -y
-
-#
-# Set installation root (for tarballs)
-#
 PKG_PREFIX=${PKG_PREFIX-/usr/local}
+
+# fetch http://myx.ru/distro/farm-general/myx.common.tbz -o - | tar jxvf - --cd "${PKG_PREFIX}/" --exclude='+*'
+fetch https://github.com/myx/os-myx.common-freebsd/archive/master.zip -o - | unzip -u - 'host/tarball/*' -d "${PKG_PREFIX}/"
+
+MYX_COMMON_COMMAND="$(echo ${PKG_PREFIX}/bin/myx.common | sed -e 's|//|/|g')"
+chown root:wheel "$MYX_COMMON_COMMAND"
+chmod 755 "$MYX_COMMON_COMMAND"
+
+MYX_COMMON_DIR="$(echo ${PKG_PREFIX}/share/myx.common | sed -e 's|//|/|g')"
+chown -R root:wheel "$MYX_COMMON_DIR/bin"
+chmod -R 750 "$MYX_COMMON_DIR/bin"
+
+ETC_DIR="$(echo ${PKG_PREFIX}/etc | sed -e 's|//|/|g')"
+chown root:wheel "$ETC_DIR/periodic/daily/403.myx.common"
+chmod 555 "$ETC_DIR/periodic/daily/403.myx.common"
+
+
+# exec "$MYX_COMMON_DIR/bin/reinstall"
+
+# completion for root in bash
+# myx.common setup/console
+# myx.common setup/server
