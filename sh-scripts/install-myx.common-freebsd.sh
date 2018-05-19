@@ -16,22 +16,21 @@ echo "myx.common FreeBSD Installer started..." >&2
 #
 test `id -u` != 0 && echo 'ERROR: Must be root!' && exit 1
 
-fetch https://github.com/myx/os-myx.common-freebsd/archive/master.zip -o - | tar zxvf - --cd "/usr/local/" --include "*/host/tarball/*" --strip-components 3
+fetch https://github.com/myx/os-myx.common/archive/master.zip -o - | \
+		tar zxvf - --cd "/usr/local/" --include "*/host/tarball/*" --strip-components 3
+		
+fetch https://github.com/myx/os-myx.common-freebsd/archive/master.zip -o - | \
+		tar zxvf - --cd "/usr/local/" --include "*/host/tarball/*" --strip-components 3
 
-MYX_COMMON_COMMAND="/usr/local/bin/myx.common"
-chown root:wheel "$MYX_COMMON_COMMAND"
-chmod 755 "$MYX_COMMON_COMMAND"
+chown root:wheel "/usr/local/bin/myx.common"
+chmod 755 "/usr/local/bin/myx.common"
 
-MYX_COMMON_DIR="/usr/local/share/myx.common"
-chown -R root:wheel "$MYX_COMMON_DIR/bin"
-chmod -R 750 "$MYX_COMMON_DIR/bin"
+chown -R root:wheel "/usr/local/share/myx.common/bin"
+chmod -R 750 "/usr/local/share/myx.common/bin"
 
-# ETC_DIR="/usr/local/etc"
-# chown root:wheel "$ETC_DIR/periodic/daily/403.myx.common"
-# chmod 555 "$ETC_DIR/periodic/daily/403.myx.common"
+# exec "/usr/local/share/myx.common/bin/reinstall"
 
-# exec "$MYX_COMMON_DIR/bin/reinstall"
-
-# completion for root in bash
-# myx.common setup/console
-# myx.common setup/server
+#
+# completion for root in bash:
+# 		myx.common setup/console
+#

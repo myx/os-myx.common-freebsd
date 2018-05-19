@@ -2,7 +2,7 @@
 
 set -e
 
-. ${0%/*}/../../include/subr.sh
+. /usr/local/share/myx.common/include/subr-universal.sh
 
 InstallAutorizedKey(){
 	local NAME="$1" KEY="$2"
