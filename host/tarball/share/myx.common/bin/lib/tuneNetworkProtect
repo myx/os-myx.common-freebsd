@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+
+set -e
+
+. "${0%/*}/../../include/subr.sh"
+
+UserRequireRoot
+
+InternReplaceLine /etc/sysctl.conf '^net.inet.udp.blackhole=*' 'net.inet.udp.blackhole=1'
