@@ -25,7 +25,7 @@ InstallUser(){
 	fi
 
 	mkdir -p "$UHOME"
-	# install -d -g 177 -o 177 "$UHOME"
+	if ! [ -z "$UGID" ] ; then install -d -g $UGID -o $UGID "$UHOME" ; fi
 
 	if pw usershow "$NAME" > /dev/null 2>&1; then
 		echo "Using existing user '$NAME'."
