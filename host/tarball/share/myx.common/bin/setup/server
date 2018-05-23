@@ -11,7 +11,7 @@ InternReplaceLine /boot/loader.conf '^autoboot_delay=*' 'autoboot_delay="2"'
 myx.common lib/tuneNetworkSpeed
 
 # extra software
-myx.common install/unsure/utilBashRsyncScreenSudo curl nano wget
+myx.common install/ensure/utilBashRsyncScreenSudo curl nano wget
 
 InternReplaceLine /usr/local/etc/sudoers '^%wheel ALL=*' '%wheel ALL=(ALL) ALL'
 
