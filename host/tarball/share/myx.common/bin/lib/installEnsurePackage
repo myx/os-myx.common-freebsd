@@ -1,8 +1,5 @@
 #!/usr/bin/env bash
 
-set -e
-#set -x
-
 . /usr/local/share/myx.common/include/subr-universal.sh
 
 InstallEnsurePackage(){
@@ -14,7 +11,7 @@ InstallEnsurePackage(){
 	local PACKAGE_NAME="$2:-$UTILITY_NAME"
 	
 	if [ ! -z "`which $UTILITY_NAME`" ] ; then \
-		echo "Utility is present: $UTILITY_NAME, skip"
+		echo "Utility is present: $UTILITY_NAME, skip" >&2
 	 else \
 		case "$PACKAGE_NAME" in
 		        java)
@@ -28,6 +25,11 @@ InstallEnsurePackage(){
 
 case "$0" in
 	*/myx.common/bin/lib/installEnsurePackage) 
+		if [ -z "$1" ] ; then
+			echo "Syntax: myx.common lib/installEnsurePackage utility_name [package_name]" >&2
+			exit 1
+		fi
+		set -e
 		InstallEnsurePackage $@
 	;;
 esac
