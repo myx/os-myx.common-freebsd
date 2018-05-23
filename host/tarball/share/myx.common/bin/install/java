@@ -2,6 +2,13 @@
 
 set -e
 
+. ${0%/*}/../../include/subr.sh
+UserRequireRoot
+
 [ ! -z `which java` ] && echo "java is already installed, version: " && echo "`java -Xinternalversion || java -version`" && exit 0 
+
+#
+# latest packaged stable version
+#
 
 pkg install -y openjdk8

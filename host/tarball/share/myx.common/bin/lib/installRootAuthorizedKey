@@ -5,7 +5,12 @@ set -e
 . ${0%/*}/../../include/subr.sh
 
 InstallRootAutorizedKey(){
+	UserRequireRoot "InstallRootAutorizedKey"
+
 	local KEY="$1"
+
+	[ -z "$KEY" ] && echo "InstallRootAutorizedKey: key is required!" && exit 2
+
 	local HOME="/root"
 	local KEYS="$HOME/.ssh/authorized_keys"
 	
@@ -18,9 +23,8 @@ InstallRootAutorizedKey(){
 	chmod 600 "$KEYS"
 }
 
-
-KEY="$1"
-
-[ -z "$KEY" ] && echo "key is required!" && exit 2
-
-InstallRootAutorizedKey "$KEY"
+case "$0" in
+	*/myx.common/bin/lib/installRootAutorizedKey) 
+		InstallRootAutorizedKey $@
+	;;
+esac

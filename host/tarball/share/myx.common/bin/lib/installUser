@@ -46,14 +46,8 @@ InstallUser(){
 	chmod 700 "$UHOME/.ssh"
 }
 
-
-NAME="$1"
-TITLE="$2"
-
-[ -z "$NAME" ] && echo "username is required!" && exit 1
-[ -z "$TITLE" ] && echo "usertitle is taken from name ($NAME)!" && TITLE="$NAME"
-	
-UGID="$3"
-UHOME="${4:-/home/$NAME/}"
-
-InstallUser "$NAME" "$TITLE" "$UGID" "$UHOME"
+case "$0" in
+	*/myx.common/bin/lib/installUser) 
+		InstallUser $@
+	;;
+esac

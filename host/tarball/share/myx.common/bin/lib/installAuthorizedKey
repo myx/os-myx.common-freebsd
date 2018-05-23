@@ -8,6 +8,9 @@ InstallAutorizedKey(){
 	local NAME="$1" KEY="$2"
 	local HOME="/home/$NAME"
 	local KEYS="$HOME/.ssh/authorized_keys"
+
+	[ -z "$NAME" ] && echo "InstallAutorizedKey: username is required!" && exit 1
+	[ -z "$KEY" ] && echo "InstallAutorizedKey: key is required!" && exit 2
 	
 	mkdir -p "$HOME/.ssh"
 	touch "$KEYS"
@@ -18,11 +21,8 @@ InstallAutorizedKey(){
 	chmod 600 "$KEYS"
 }
 
-
-NAME="$1"
-KEY="$2"
-
-[ -z "$NAME" ] && echo "username is required!" && exit 1
-[ -z "$KEY" ] && echo "key is required!" && exit 2
-
-InstallAutorizedKey "$NAME" "$KEY"
+case "$0" in
+	*/myx.common/bin/lib/installAutorizedKey) 
+		InstallAuthorizedKey $@
+	;;
+esac

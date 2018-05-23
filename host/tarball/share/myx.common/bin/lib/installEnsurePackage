@@ -1,0 +1,33 @@
+#!/usr/bin/env bash
+
+set -e
+#set -x
+
+. /usr/local/share/myx.common/include/subr-universal.sh
+
+InstallEnsurePackage(){
+	UserRequireRoot "InstallEnsurePackage"
+
+	local UTILITY_NAME="$1"
+	[ -z "$UTILITY_NAME" ] && echo "The utility name is required!" && exit 1
+
+	local PACKAGE_NAME="$2:-$UTILITY_NAME"
+	
+	if ! -z "`which $UTILITY_NAME`" ; then \
+		echo "Utility is present: $UTILITY_NAME, skip"
+	 else \
+		case "$PACKAGE_NAME" in
+		        java)
+		        	PACKAGE_NAME="openjdk8"
+		        	break
+					;;
+		esac
+	 	pkg install -y $PACKAGE_NAME
+	fi
+}
+
+case "$0" in
+	*/myx.common/bin/lib/installEnsurePackage) 
+		InstallEnsurePackage $@
+	;;
+esac

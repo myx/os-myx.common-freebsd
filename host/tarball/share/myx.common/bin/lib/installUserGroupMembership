@@ -21,12 +21,8 @@ InstallUserGroupMembership(){
 	pwd_mkdb /etc/master.passwd
 }
 
-
-NAME="$1"
-GROUP="$2"
-
-[ -z "$NAME" ] && echo "username is required!" && exit 1
-[ -z "$GROUP" ] && echo "groupname is taken from username ($NAME)!" && GROUP="$NAME"
-	
-
-InstallUserGroupMembership "$NAME" "$GROUP"
+case "$0" in
+	*/myx.common/bin/lib/installUserGroupMembership) 
+		InstallUserGroupMembership $@
+	;;
+esac

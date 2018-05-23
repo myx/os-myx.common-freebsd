@@ -16,12 +16,8 @@ InstallWheelUser(){
 	/usr/local/share/myx.common/bin/lib/installUserGroupMembership "$NAME" "wheel"
 }
 
-
-NAME="$1"
-TITLE="$2"
-
-[ -z "$NAME" ] && echo "username is required!" && exit 1
-[ -z "$TITLE" ] && echo "usertitle is taken from name ($NAME)!" && TITLE="$NAME"
-	
-
-InstallWheelUser "$NAME" "$TITLE"
+case "$0" in
+	*/myx.common/bin/lib/installWheelUser) 
+		InstallWheelUser $@
+	;;
+esac
