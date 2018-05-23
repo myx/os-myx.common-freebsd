@@ -13,6 +13,6 @@ FetchStdout(){
 
 case "$0" in
 	*/myx.common/bin/lib/fetchStdout) 
-		FetchStdout $@
+		FetchStdout "$@"
 	;;
 esac

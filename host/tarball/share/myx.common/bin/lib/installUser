@@ -48,6 +48,6 @@ InstallUser(){
 
 case "$0" in
 	*/myx.common/bin/lib/installUser) 
-		InstallUser $@
+		InstallUser "$@"
 	;;
 esac

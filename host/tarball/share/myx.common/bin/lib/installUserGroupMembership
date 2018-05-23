@@ -23,6 +23,6 @@ InstallUserGroupMembership(){
 
 case "$0" in
 	*/myx.common/bin/lib/installUserGroupMembership) 
-		InstallUserGroupMembership $@
+		InstallUserGroupMembership "$@"
 	;;
 esac

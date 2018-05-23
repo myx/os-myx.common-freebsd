@@ -23,6 +23,6 @@ InstallAutorizedKey(){
 
 case "$0" in
 	*/myx.common/bin/lib/installAutorizedKey) 
-		InstallAuthorizedKey $@
+		InstallAuthorizedKey "$@"
 	;;
 esac

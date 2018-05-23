@@ -30,6 +30,6 @@ case "$0" in
 			exit 1
 		fi
 		set -e
-		InstallEnsurePackage $@
+		InstallEnsurePackage "$@"
 	;;
 esac

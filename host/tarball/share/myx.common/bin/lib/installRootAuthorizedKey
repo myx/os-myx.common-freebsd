@@ -25,6 +25,6 @@ InstallRootAutorizedKey(){
 
 case "$0" in
 	*/myx.common/bin/lib/installRootAutorizedKey) 
-		InstallRootAutorizedKey $@
+		InstallRootAutorizedKey "$@"
 	;;
 esac
