@@ -17,10 +17,10 @@ echo "myx.common FreeBSD Installer started..." >&2
 test `id -u` != 0 && echo 'ERROR: Must be root!' && exit 1
 
 fetch https://github.com/myx/os-myx.common/archive/master.zip -o - | \
-		tar zxvf - --cd "/usr/local/" --include "*/host/tarball/*" --strip-components 3
+		tar zxvf - -C "/usr/local/" --include "*/host/tarball/*" --strip-components 3
 		
 fetch https://github.com/myx/os-myx.common-freebsd/archive/master.zip -o - | \
-		tar zxvf - --cd "/usr/local/" --include "*/host/tarball/*" --strip-components 3
+		tar zxvf - -C "/usr/local/" --include "*/host/tarball/*" --strip-components 3
 
 chown root:wheel "/usr/local/bin/myx.common"
 chmod 755 "/usr/local/bin/myx.common"
