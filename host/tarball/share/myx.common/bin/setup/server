@@ -30,3 +30,4 @@ sysrc \
 # update NTP date NOW!
 ntpdate -u -b pool.ntp.org || true
 
+test "$1" != "--postfix-mta" || myx.common lib/installPostfixMTA 
