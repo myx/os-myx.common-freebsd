@@ -49,3 +49,4 @@ myx.common lib/fetchStdout https://github.com/acmcms/acm-install-freebsd/archive
  		tar zxvf - -C "/usr/local" --include "*/host/tarball/*" --strip-components 3
 
 bash "/usr/local/acmbsd/scripts/acmbsd.sh" "preparebsd"
+bash "/usr/local/acmbsd/scripts/acmbsd.sh" "install" "-noupdate"
