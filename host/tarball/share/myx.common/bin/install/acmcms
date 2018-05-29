@@ -52,4 +52,15 @@ myx.common lib/replaceLine /etc/ssh/sshd_config '^ClientAliveCountMax *' 'Client
 
 
 
-echo "Not yet!"
+echo "Not yet! BETA BETA BETA"
+
+
+
+TMP_DIR="`mktemp -d`"
+
+myx.common lib/fetchStdout https://github.com/acmcms/acm-install-freebsd/archive/master.tar.gz | \
+ 		tar zxvf - -C "$TMP_DIR" --include "*/sh-scripts/acmbsd/*" --strip-components 3
+
+bash "$TMP_DIR/acmbsd.sh" "preparebsd"
+
+rm -rf "$TMP_DIR"
