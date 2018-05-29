@@ -24,7 +24,8 @@ pkg install -y sudo bash nano screen curl postfix metamail rsync rlwrap elinks x
 
 fetch https://raw.githubusercontent.com/myx/os-myx.common-freebsd/master/sh-scripts/install-myx.common-freebsd.sh -o - | sh -e
 
-myx.common lib/replaceLine /usr/local/etc/sudoers "# %wheel ALL=(ALL) ALL" "%wheel ALL=(ALL) ALL"
+myx.common setup/server --postfix-mta
+myx.common lib/replaceLine /usr/local/etc/sudoers '^%wheel ALL=*' '%wheel ALL=(ALL) ALL'
 
 
 # ACMBSDPATH=/usr/local/acmbsd
