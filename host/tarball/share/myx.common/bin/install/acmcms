@@ -7,25 +7,15 @@ UserRequireRoot
 
 
 
-sysrc \
-	postfix_enable=YES \ 
-	sendmail_enable=NONE \
-	sendmail_submit_enable=NO \
-	sendmail_outbound_enable=NO \
-	sendmail_msp_queue_enable=NO
-	
-sysrc sshd_enable="YES"
-sysrc fsck_y_enable="YES"
+fetch https://raw.githubusercontent.com/myx/os-myx.common-freebsd/master/sh-scripts/install-myx.common-freebsd.sh -o - | sh -e
+
+myx.common setup/server --postfix-mta
+
 sysrc named_enable="YES"
 sysrc ntpdate_enable="YES"
 sysrc ntpdate_flags="-b pool.ntp.org europe.pool.ntp.org time.euro.apple.com"
 
 pkg install -y sudo bash nano screen curl postfix metamail rsync rlwrap elinks xtail xmlstarlet ncdu tinc mtr-nox11 p5-ack smartmontools cpuflags ipcalc trafshow host-setup sysrc openjdk8 bind911
-
-fetch https://raw.githubusercontent.com/myx/os-myx.common-freebsd/master/sh-scripts/install-myx.common-freebsd.sh -o - | sh -e
-
-myx.common setup/server --postfix-mta
-myx.common lib/replaceLine /usr/local/etc/sudoers '^%wheel ALL=*' '%wheel ALL=(ALL) ALL'
 
 
 # ACMBSDPATH=/usr/local/acmbsd
