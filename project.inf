@@ -1,9 +1,12 @@
 Name: os-myx.common-freebsd
-Requires: 
+Requires: os-myx.common
+Provides: \
+	os.any os.unix os.freebsd myx.common/os-myx.common-freebsd \
+	freebsd-installer.sh:build.freebsd-installer \
+	build-prepare:project-source.tgz \
+	deploy-export:project-source.tgz:github.com/myx/os-myx.common-freebsd/archive/master.tar.gz \
+	deploy-export:sh-scripts/install-myx.common-freebsd.sh:raw.githubusercontent.com/myx/os-myx.common-freebsd/master/sh-scripts/install-myx.common-freebsd.sh \
+
 Augments: 
 Suggests: 
 Declares: 
-Provides:	os.any \
-			os.unix \
-			os.freebsd \
-			build.freebsd-installer:build-tool
