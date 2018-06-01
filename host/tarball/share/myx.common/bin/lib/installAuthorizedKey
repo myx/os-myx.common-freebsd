@@ -5,6 +5,8 @@ set -ex
 . /usr/local/share/myx.common/include/subr-universal.sh
 
 InstallAutorizedKey(){
+	set -ex
+	
 	local NAME="$1"
 	local KEY="$2"
 
