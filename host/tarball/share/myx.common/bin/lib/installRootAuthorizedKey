@@ -1,6 +1,6 @@
 #!/bin/sh
 
-set -e
+set -ex
 
 . ${0%/*}/../../include/subr.sh
 
@@ -9,7 +9,7 @@ InstallRootAutorizedKey(){
 
 	local KEY="$1"
 
-	[ ! -z "$KEY" ] || (echo "InstallRootAutorizedKey: key is required!" && exit 2)
+	test ! -z "$KEY" || ( echo "InstallRootAutorizedKey: key is required!" ; exit 2 )
 
 	local HOME="/root"
 	local KEYS="$HOME/.ssh/authorized_keys"
