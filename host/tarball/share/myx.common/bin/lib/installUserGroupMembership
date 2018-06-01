@@ -9,8 +9,11 @@ InstallUserGroupMembership(){
 
 	local NAME="$1" GROUP="$2"
 
-	[ -z "$NAME" ] && echo "InstallUserGroupMembership: username is required!" && exit 1
-	[ -z "$GROUP" ] && echo "InstallUserGroupMembership: groupname is taken from username ($NAME)!" && GROUP="$NAME"
+	test ! -z "$NAME" || ( echo "InstallUserGroupMembership: username is required!" ; exit 1 )
+	if test ! -z "$GROUP" ; then
+		echo "InstallUserGroupMembership: groupname is taken from username ($NAME)!"
+		GROUP="$NAME"
+	fi
 	
 	pwd_mkdb /etc/master.passwd
 
