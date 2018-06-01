@@ -4,14 +4,12 @@ set -e
 
 . /usr/local/share/myx.common/include/subr-universal.sh
 
-InstallAutorizedKey(){
-	set -ex
-	
+InstallAuthorizedKey(){
 	local NAME="$1"
 	local KEY="$2"
 
-	test ! -z "$NAME" || ( echo "InstallAutorizedKey: username is required!" >&2 ; exit 1 )
-	test ! -z "$KEY" || ( echo "InstallAutorizedKey: key is required!" >&2 ; exit 2 )
+	test ! -z "$NAME" || ( echo "InstallAuthorizedKey: username is required!" >&2 ; exit 1 )
+	test ! -z "$KEY" || ( echo "InstallAuthorizedKey: key is required!" >&2 ; exit 2 )
 
 	local HOME="/home/$NAME"
 	local KEYS="$HOME/.ssh/authorized_keys"
@@ -26,7 +24,7 @@ InstallAutorizedKey(){
 }
 
 case "$0" in
-	*/myx.common/bin/lib/installAutorizedKey) 
+	*/myx.common/bin/lib/installAuthorizedKey) 
 		InstallAuthorizedKey "$@"
 	;;
 esac

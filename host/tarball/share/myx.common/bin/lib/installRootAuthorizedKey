@@ -1,15 +1,15 @@
 #!/usr/bin/env bash
 
-set -ex
+set -e
 
 . /usr/local/share/myx.common/include/subr-universal.sh
 
-InstallRootAutorizedKey(){
-	UserRequireRoot "InstallRootAutorizedKey"
+InstallRootAuthorizedKey(){
+	UserRequireRoot "InstallRootAuthorizedKey"
 
 	local KEY="$1"
 
-	test ! -z "$KEY" || ( echo "InstallRootAutorizedKey: key is required!" ; exit 2 )
+	test ! -z "$KEY" || ( echo "InstallRootAuthorizedKey: key is required!" ; exit 2 )
 
 	local HOME="/root"
 	local KEYS="$HOME/.ssh/authorized_keys"
@@ -24,7 +24,7 @@ InstallRootAutorizedKey(){
 }
 
 case "$0" in
-	*/myx.common/bin/lib/installRootAutorizedKey) 
-		InstallRootAutorizedKey "$@"
+	*/myx.common/bin/lib/installRootAuthorizedKey) 
+		InstallRootAuthorizedKey "$@"
 	;;
 esac
