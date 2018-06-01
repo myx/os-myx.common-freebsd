@@ -2,7 +2,7 @@
 
 set -e
 
-. ${0%/*}/../../include/subr-universal.sh
+. /usr/local/share/myx.common/include/subr-universal.sh
 
 echo "Setting up console for: $HOME"
 

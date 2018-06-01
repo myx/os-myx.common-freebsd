@@ -2,7 +2,7 @@
 
 set -e
 
-. ${0%/*}/../../include/subr.sh
+. /usr/local/share/myx.common/include/subr-universal.sh
 UserRequireRoot
 
 [ ! -z `which java` ] && echo "java is already installed, version: " && echo "`java -Xinternalversion || java -version`" && exit 0 

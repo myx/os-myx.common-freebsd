@@ -1,8 +1,8 @@
-#!/bin/sh
+#!/usr/bin/env bash
 
 set -ex
 
-. ${0%/*}/../../include/subr.sh
+. /usr/local/share/myx.common/include/subr-universal.sh
 
 InstallRootAutorizedKey(){
 	UserRequireRoot "InstallRootAutorizedKey"
