@@ -5,12 +5,13 @@ set -e
 . /usr/local/share/myx.common/include/subr-universal.sh
 
 InstallAutorizedKey(){
-	local NAME="$1" KEY="$2"
+	local NAME="$1"
+	local KEY="$2"
 	local HOME="/home/$NAME"
 	local KEYS="$HOME/.ssh/authorized_keys"
 
-	[ -z "$NAME" ] && echo "InstallAutorizedKey: username is required!" && exit 1
-	[ -z "$KEY" ] && echo "InstallAutorizedKey: key is required!" && exit 2
+	[ ! -z "$NAME" ] || (echo "InstallAutorizedKey: username is required!" && exit 1)
+	[ ! -z "$KEY" ] || (echo "InstallAutorizedKey: key is required!" && exit 2)
 	
 	mkdir -p "$HOME/.ssh"
 	touch "$KEYS"
