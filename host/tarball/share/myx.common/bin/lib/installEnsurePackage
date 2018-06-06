@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/bin/sh
 
 . /usr/local/share/myx.common/include/subr-universal.sh
 
