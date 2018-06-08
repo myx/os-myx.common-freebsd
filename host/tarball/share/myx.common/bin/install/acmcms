@@ -5,48 +5,7 @@ set -e
 . /usr/local/share/myx.common/include/subr-freebsd.sh
 UserRequireRoot
 
+# This supposed to be done in the beginning of the ae3 installer anyway:
+#   fetch https://raw.githubusercontent.com/myx/os-myx.common-freebsd/master/sh-scripts/install-myx.common-freebsd.sh -o - | sh -e
 
-
-fetch https://raw.githubusercontent.com/myx/os-myx.common-freebsd/master/sh-scripts/install-myx.common-freebsd.sh -o - | sh -e
-
-myx.common setup/server --postfix-mta
-
-sysrc named_enable=YES
-sysrc ntpdate_enable=YES
-sysrc ntpdate_flags="-b pool.ntp.org europe.pool.ntp.org time.euro.apple.com"
-
-pkg install -y sudo bash nano screen curl postfix metamail rsync rlwrap elinks xtail xmlstarlet ncdu tinc mtr-nox11 p5-ack smartmontools cpuflags ipcalc trafshow host-setup sysrc openjdk8 bind911
-
-
-# ACMBSDPATH=/usr/local/acmbsd
-# SCRIPTNAME=acmbsd
-
-myx.common lib/installUser acmbsd "ACMBSD pseudo-user" 191 "/usr/local/acmbsd"
-
-mkdir -p /usr/local/acmbsd/.ssh
-chown acmbsd:acmbsd /usr/local/acmbsd/.ssh
-chmod 700 /usr/local/acmbsd/.ssh
-
-echo -n Check for keys...
-if [ ! -f "/usr/local/acmbsd/.ssh/id_rsa" -o ! -f "/usr/local/acmbsd/.ssh/id_rsa.pub" ]; then
-   ssh-keygen -q -N "" -f /usr/local/acmbsd/.ssh/id_rsa -t rsa
-   myx.common lib/out.status green CREATED
-else
-   myx.common lib/out.status green FOUND
-fi
-
-## Keeps SSH connection
-myx.common lib/replaceLine /etc/ssh/sshd_config '^ClientAliveInterval *' 'ClientAliveInterval 60'
-myx.common lib/replaceLine /etc/ssh/sshd_config '^ClientAliveCountMax *' 'ClientAliveCountMax 10'
-
-
-
-
-echo "Not yet! BETA BETA BETA"
-
-
-myx.common lib/fetchStdout https://github.com/acmcms/acm-install-freebsd/archive/master.tar.gz | \
- 		tar zxvf - -C "/usr/local" --include "*/host/tarball/*" --strip-components 3
-
-bash "/usr/local/acmbsd/scripts/acmbsd.sh" "preparebsd"
-bash "/usr/local/acmbsd/scripts/acmbsd.sh" "install" "-noupdate"
+fetch https://raw.githubusercontent.com/acmcms/acm-install-freebsd/master/sh-scripts/install-freebsd.sh -o - | sh -e
