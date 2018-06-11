@@ -11,7 +11,7 @@ InstallAuthorizedKey(){
 	test ! -z "$NAME" || ( echo "InstallAuthorizedKey: username is required!" >&2 ; exit 1 )
 	test ! -z "$KEY" || ( echo "InstallAuthorizedKey: key is required!" >&2 ; exit 2 )
 
-	test "$NAME" == "`whoami`" || UserRequireRoot "InstallRootAuthorizedKey"
+	test "$NAME" = "`whoami`" || UserRequireRoot "InstallRootAuthorizedKey"
 
 	local HOME="/home/$NAME"
 	local KEYS="$HOME/.ssh/authorized_keys"
