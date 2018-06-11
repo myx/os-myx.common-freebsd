@@ -1,12 +1,19 @@
 #!/usr/bin/env bash
 
+##############################################################################
+#
+# this script overrides the default implementation in order to try to install
+# all packages required using single 'pkg' utility call (batch) 
+#
+##############################################################################
+
 set -e
 
 # It is better to be autonomous in this command, so instead of:
 #   . /usr/local/share/myx.common/include/subr-freebsd.sh
 #   UserRequireRoot
 # we do:
-test `id -u` != 0 && echo 'ERROR: Must be root!' && exit 1
+test `id -u` = 0 || { echo '$1: Must be run under "root" user!'; exit 1; }
 
 LIST=""
 
