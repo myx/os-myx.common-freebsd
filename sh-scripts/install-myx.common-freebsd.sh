@@ -10,11 +10,7 @@
 #
 
 echo "myx.common FreeBSD Installer started..." >&2
-
-#
-# Check user
-#
-test `id -u` != 0 && echo 'ERROR: Must be root!' && exit 1
+test `id -u` != 0 && echo 'ERROR: Must be root!' >&2 && exit 1
 
 fetch https://github.com/myx/os-myx.common/archive/master.tar.gz -o - | \
 		tar zxvf - -C "/usr/local/" --include "*/host/tarball/*" --strip-components 3
@@ -28,9 +24,4 @@ chmod 755 "/usr/local/bin/myx.common"
 chown -R root:wheel "/usr/local/share/myx.common/bin"
 chmod -R 755 "/usr/local/share/myx.common/bin"
 
-# exec "/usr/local/share/myx.common/bin/reinstall"
-
-#
-# completion for root in bash:
-# 		myx.common setup/console
-#
+echo "myx.common: installed, run 'myx.common help' for more info."
