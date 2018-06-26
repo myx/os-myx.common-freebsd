@@ -10,49 +10,55 @@ type ReplaceLine >/dev/null 2>&1 || \
 	. "/usr/local/share/myx.common/bin/lib/replaceLine"
 
 
-AddScriptInclude(){
-	local TGT_SCRIPT="$1"
-	local OWN_SCRIPT="$2"
-
-	rm "$OWN_SCRIPT"
-	[ -f "$TGT_SCRIPT" ] && ReplaceLine "$TGT_SCRIPT" "source $OWN_SCRIPT" ""
-	[ -f "$TGT_SCRIPT" ] && ReplaceLine "$TGT_SCRIPT" ". $OWN_SCRIPT" ""
-}
-
 
 # interactive
-AddScriptInclude "$HOME/.shrc"		"$HOME/.myx/etc/shrc"
-AddScriptInclude "$HOME/.bashrc"	"$HOME/.myx/etc/bashrc"
-AddScriptInclude "$HOME/.cshrc"		"$HOME/.myx/etc/cshrc"
+
 
 touch "$HOME/.shrc"
+
+ReplaceLine "$HOME/.shrc" "^. ${HOME}.myx/etc/shrc*" ""
+
 ReplaceLine "$HOME/.shrc" " ### myx.common setup/console ###$" \
 	". /usr/local/share/myx.common/include/console/bash/sh-interactive  ### myx.common setup/console ###"
+
 	
 touch "$HOME/.bashrc"
+
+ReplaceLine "$HOME/.bashrc" "^. ${HOME}.myx/etc/bashrc*" ""
+
 ReplaceLine "$HOME/.bashrc" " ### myx.common setup/console ###$" \
 	"source /usr/local/share/myx.common/include/console/bash/bash-interactive  ### myx.common setup/console ###"
+
 	
 touch "$HOME/.cshrc"
+
+ReplaceLine "$HOME/.cshrc" "^source ${HOME}.myx/etc/cshrc*" ""
+
 ReplaceLine "$HOME/.cshrc" " ### myx.common setup/console ###$" \
 	"source /usr/local/share/myx.common/include/console/tcsh/common  ### myx.common setup/console ###"
 
 
 # login
-AddScriptInclude "$HOME/.profile"		"$HOME/.myx/etc/profile"		"`cfg.profile`"			"."
-AddScriptInclude "$HOME/.bash_profile"	"$HOME/.myx/etc/bash_profile"	"`cfg.bash_profile`"	"."
-AddScriptInclude "$HOME/.login"			"$HOME/.myx/etc/csh_profile"	"`cfg.tcsh_profile`"	"source"
 
 
 touch "$HOME/.profile"
+
+ReplaceLine "$HOME/.profile" "^. ${HOME}.myx/etc/profile*" ""
+
 ReplaceLine "$HOME/.profile" " ### myx.common setup/console ###$" \
 	". /usr/local/share/myx.common/include/console/bash/sh-login  ### myx.common setup/console ###"
 
 touch "$HOME/.bash_profile"
+
+ReplaceLine "$HOME/.bash_profile" "^. ${HOME}.myx/etc/bash_profile*" ""
+
 ReplaceLine "$HOME/.bash_profile" " ### myx.common setup/console ###$" \
 	"source /usr/local/share/myx.common/include/console/bash/bash-login  ### myx.common setup/console ###"
 
 touch "$HOME/.login"
+
+ReplaceLine "$HOME/.login" "^source ${HOME}.myx/etc/csh_profile*" ""
+
 ReplaceLine "$HOME/.login" " ### myx.common setup/console ###$" \
 	"source /usr/local/share/myx.common/include/console/tcsh/login  ### myx.common setup/console ###"
 
