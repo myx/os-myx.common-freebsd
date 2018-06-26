@@ -2,8 +2,6 @@
 
 set -e
 
-# copied from ../../include/subr.sh
-
 PARAM="$1"
 VALUE="$2"
 

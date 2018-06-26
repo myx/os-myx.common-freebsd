@@ -7,7 +7,9 @@
 set -e
 
 # It is better to be autonomous in this command, so instead of:
-#   . ${0%/*}/../../include/subr.sh
+#	if [ "`type -t UserRequireRoot`" != "function" ] ; then
+#	. "/usr/local/share/myx.common/bin/user/requireRoot"
+#	fi
 #   UserRequireRoot
 # we do:
 test `id -u` = 0 || { echo "$0: Must be run under root user!" >&2 ; exit 1 ; }

@@ -9,11 +9,10 @@
 
 set -e
 
-# It is better to be autonomous in this command, so instead of:
-#   . /usr/local/share/myx.common/include/subr-freebsd.sh
-#   UserRequireRoot
-# we do:
-test `id -u` = 0 || { echo '$1: Must be run under "root" user!'; exit 1; }
+if [ "`type -t UserRequireRoot`" != "function" ] ; then
+. "/usr/local/share/myx.common/bin/user/requireRoot"
+fi
+UserRequireRoot 
 
 LIST=""
 

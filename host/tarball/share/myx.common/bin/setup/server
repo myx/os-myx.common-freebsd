@@ -2,18 +2,24 @@
 
 set -e
 
-. /usr/local/share/myx.common/include/subr-universal.sh
+if [ "`type -t UserRequireRoot`" != "function" ] ; then
+. "/usr/local/share/myx.common/bin/user/requireRoot"
+fi
 
 UserRequireRoot
 
-InternReplaceLine /boot/loader.conf '^autoboot_delay=*' 'autoboot_delay="2"'
+if [ "`type -t ReplaceLine`" != "function" ] ; then
+. "/usr/local/share/myx.common/bin/lib/replaceLine"
+fi
+
+ReplaceLine /boot/loader.conf '^autoboot_delay=*' 'autoboot_delay="2"'
 
 myx.common lib/tuneNetworkSpeed
 
 # extra software
 myx.common install/ensure/utilBashRsyncScreenSudo curl nano wget
 
-InternReplaceLine /usr/local/etc/sudoers '^%wheel ALL=*' '%wheel ALL=(ALL) ALL'
+ReplaceLine /usr/local/etc/sudoers '^%wheel ALL=*' '%wheel ALL=(ALL) ALL'
 
 # rc.conf
 sysrc \

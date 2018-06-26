@@ -2,8 +2,10 @@
 
 set -e
 
-. /usr/local/share/myx.common/include/subr-universal.sh
-UserRequireRoot
+if [ "`type -t UserRequireRoot`" != "function" ] ; then
+. "/usr/local/share/myx.common/bin/user/requireRoot"
+fi
+UserRequireRoot "install/monit"
 
 pkg install -y monit
 

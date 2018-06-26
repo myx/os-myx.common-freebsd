@@ -2,8 +2,14 @@
 
 set -e
 
-. /usr/local/share/myx.common/include/subr-universal.sh
+if [ "`type -t UserRequireRoot`" != "function" ] ; then
+. "/usr/local/share/myx.common/bin/user/requireRoot"
+fi
 
 UserRequireRoot
 
-InternReplaceLine /etc/sysctl.conf '^net.inet.udp.blackhole=*' 'net.inet.udp.blackhole=1'
+if [ "`type -t ReplaceLine`" != "function" ] ; then
+. "/usr/local/share/myx.common/bin/lib/replaceLine"
+fi
+
+ReplaceLine /etc/sysctl.conf '^net.inet.udp.blackhole=*' 'net.inet.udp.blackhole=1'
