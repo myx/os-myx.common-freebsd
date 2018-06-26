@@ -6,9 +6,9 @@
 
 set -e
 
-if [ "`type -t UserRequireRoot`" != "function" ] ; then
-. "/usr/local/share/myx.common/bin/user/requireRoot"
-fi
+type UserRequireRoot >/dev/null 2>&1 || \
+	. "/usr/local/share/myx.common/bin/user/requireRoot"
+
 UserRequireRoot "install/ae3"
 
 # This supposed to be done in the beginning of the ae3 installer anyway:

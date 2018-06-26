@@ -2,15 +2,13 @@
 
 set -e
 
-if [ "`type -t UserRequireRoot`" != "function" ] ; then
-. "/usr/local/share/myx.common/bin/user/requireRoot"
-fi
+type UserRequireRoot >/dev/null 2>&1 || \
+	. "/usr/local/share/myx.common/bin/user/requireRoot"
 
 UserRequireRoot
 
-if [ "`type -t ReplaceLine`" != "function" ] ; then
-. "/usr/local/share/myx.common/bin/lib/replaceLine"
-fi
+type ReplaceLine >/dev/null 2>&1 || \
+	. "/usr/local/share/myx.common/bin/lib/replaceLine"
 
 ReplaceLine /boot/loader.conf '^autoboot_delay=*' 'autoboot_delay="2"'
 

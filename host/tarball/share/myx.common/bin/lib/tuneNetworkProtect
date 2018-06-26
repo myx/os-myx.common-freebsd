@@ -2,14 +2,12 @@
 
 set -e
 
-if [ "`type -t UserRequireRoot`" != "function" ] ; then
-. "/usr/local/share/myx.common/bin/user/requireRoot"
-fi
+type UserRequireRoot >/dev/null 2>&1 || \
+	. "/usr/local/share/myx.common/bin/user/requireRoot"
 
 UserRequireRoot
 
-if [ "`type -t ReplaceLine`" != "function" ] ; then
-. "/usr/local/share/myx.common/bin/lib/replaceLine"
-fi
+type ReplaceLine >/dev/null 2>&1 || \
+	. "/usr/local/share/myx.common/bin/lib/replaceLine"
 
 ReplaceLine /etc/sysctl.conf '^net.inet.udp.blackhole=*' 'net.inet.udp.blackhole=1'

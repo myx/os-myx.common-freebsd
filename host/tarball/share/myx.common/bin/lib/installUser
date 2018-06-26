@@ -3,9 +3,8 @@
 set -e
 #set -x
 
-if [ "`type -t UserRequireRoot`" != "function" ] ; then
-. "/usr/local/share/myx.common/bin/user/requireRoot"
-fi
+type UserRequireRoot >/dev/null 2>&1 || \
+	. "/usr/local/share/myx.common/bin/user/requireRoot"
 
 InstallUser(){
 	UserRequireRoot "InstallUser"
