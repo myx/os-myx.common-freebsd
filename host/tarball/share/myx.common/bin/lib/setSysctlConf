@@ -14,4 +14,8 @@ if sysctl -n "$PARAM" > /dev/null 2>&1 ; then
 		myx.common lib/replaceLine /etc/sysctl.conf "^$PARAM=*" "$PARAM=$VALUE"
 	fi
 
+else
+
+	echo "sysctl oid $PARAM in not supported!" >&2
+
 fi
