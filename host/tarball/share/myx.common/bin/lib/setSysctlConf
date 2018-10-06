@@ -5,4 +5,10 @@ set -e
 PARAM="$1"
 VALUE="$2"
 
-sysctl "$PARAM=$VALUE" && myx.common lib/replaceLine /etc/sysctl.conf "^$PARAM=*" "$PARAM=$VALUE"
+CURRENT="$(sysctl -n "$PARAM")"
+
+if [ "$CURRENT" != "$VALUE" ] ; then 
+	sysctl "$PARAM=$VALUE"
+	myx.common lib/replaceLine /etc/sysctl.conf "^$PARAM=*" "$PARAM=$VALUE"
+fi
+
