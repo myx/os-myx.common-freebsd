@@ -17,13 +17,11 @@ if sysctl -n "$PARAM" > /dev/null 2>&1 ; then
 
 	if [ "$GROW" = "TRUE" ] ; then
 		if [ "$VALUE" -gt "$CURRENT" ] ; then 
-			sysctl "$PARAM=$VALUE"
-			myx.common lib/replaceLine /etc/sysctl.conf "^$PARAM=*" "$PARAM=$VALUE"
+			sysctl "$PARAM=$VALUE" && myx.common lib/replaceLine /etc/sysctl.conf "^$PARAM=*" "$PARAM=$VALUE" || true
 		fi
 	else
 		if [ "$VALUE" = "$CURRENT" ] ; then 
-			sysctl "$PARAM=$VALUE"
-			myx.common lib/replaceLine /etc/sysctl.conf "^$PARAM=*" "$PARAM=$VALUE"
+			sysctl "$PARAM=$VALUE" && myx.common lib/replaceLine /etc/sysctl.conf "^$PARAM=*" "$PARAM=$VALUE" || true
 		fi
 	fi
 
