@@ -6,6 +6,7 @@ PARAM="$1"
 
 if [ "$2" == "--grow" ] ; then
 	GROW="TRUE"
+	shift
 fi
 
 VALUE="$2"
