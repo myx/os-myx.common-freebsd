@@ -3,15 +3,27 @@
 set -e
 
 PARAM="$1"
+
+if [ "$2" == "--grow" ] ; then
+	GROW="TRUE"
+fi
+
 VALUE="$2"
 
 if sysctl -n "$PARAM" > /dev/null 2>&1 ; then
 
 	CURRENT="$(sysctl -n "$PARAM")"
 
-	if [ "$CURRENT" != "$VALUE" ] ; then 
-		sysctl "$PARAM=$VALUE"
-		myx.common lib/replaceLine /etc/sysctl.conf "^$PARAM=*" "$PARAM=$VALUE"
+	if [ "$GROW" -eq "TRUE" ] ; then
+		if [ "$VALUE" -gt "$CURRENT" ] ; then 
+			sysctl "$PARAM=$VALUE"
+			myx.common lib/replaceLine /etc/sysctl.conf "^$PARAM=*" "$PARAM=$VALUE"
+		fi
+	else
+		if [ "$VALUE" = "$CURRENT" ] ; then 
+			sysctl "$PARAM=$VALUE"
+			myx.common lib/replaceLine /etc/sysctl.conf "^$PARAM=*" "$PARAM=$VALUE"
+		fi
 	fi
 
 else
