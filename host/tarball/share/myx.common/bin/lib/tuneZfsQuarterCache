@@ -1,0 +1,37 @@
+#!/bin/sh
+
+type UserRequireRoot >/dev/null 2>&1 || \
+	. "/usr/local/share/myx.common/bin/user/requireRoot"
+
+TuneZfsQuarterCache(){
+	# sysctl -n hw.physmem
+	# sysctl -a | grep vfs\\.zfs | grep \\.arc_
+
+	UserRequireRoot "TuneZfsQuarterCache"
+
+	if [ "" = "$(sysctl -a | grep vfs.zfs.arc_max)" ] ; then
+		echo "No ZFS ARC tunable detected." >&2
+		return 0
+	fi
+	
+	MEM_ALL="$( sysctl -n hw.physmem )"
+	MAX_ARC="$( sysctl -n vfs.zfs.arc_max )"
+	MIN_ARC="$( sysctl -n vfs.zfs.arc_min )"
+	NEW_ARC="$( echo "" | bc -e "$MAX_ALL / 4" )"
+	
+	if [ "$NEW_ARC" -lt "$MAX_ARC" -a "$MIN_ARC" -lt "$NEW_ARC" ] ; then
+		echo "setting new arc_max, $NEW_ARC" >&2
+		sysctl vfs.zfs.arc_max=$NEW_ARC
+	fi
+}
+
+case "$0" in
+	*/myx.common/bin/lib/tuneZfsQuarterCache) 
+		if [ -z "$1" ] ; then
+			echo "Syntax: myx.common lib/tuneZfsQuarterCache [--save/--remove]" >&2
+			exit 1
+		fi
+		set -e
+		TuneZfsQuarterCache "$@"
+	;;
+esac
