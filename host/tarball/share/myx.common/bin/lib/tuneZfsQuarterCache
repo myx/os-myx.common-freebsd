@@ -16,14 +16,14 @@ TuneZfsQuarterCache(){
 			. /etc/rc.subr
 			
 			name="myx-common-zfs-quarter-cache"
-			rcvar="myx-common-zfs-quarter-cache_enable"
+			rcvar="myx_common_zfsQuarterCache_enable"
 			
 			start_cmd="/usr/local/bin/myx.common lib/tuneZfsQuarterCache"
 			stop_cmd=":"
 			
 			load_rc_config $name
 			
-			: ${myx-common-zfs-quarter-cache_enable:=yes}
+			myx_common_zfsQuarterCache_enable="${myx_common_zfsQuarterCache_enable:-YES}"
 			
 			run_rc_command "$1"
 		EOF
@@ -56,6 +56,7 @@ TuneZfsQuarterCache(){
 case "$0" in
 	*/myx.common/bin/lib/tuneZfsQuarterCache) 
 		if [ "--help" = "$1" ] ; then
+			# TuneZfsQuarterCache --upsert
 			echo "Syntax: myx.common lib/tuneZfsQuarterCache [--upsert/--remove]" >&2
 			exit 1
 		fi
