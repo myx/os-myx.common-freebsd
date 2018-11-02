@@ -13,6 +13,11 @@ TuneZfsQuarterCache(){
 		cat > /usr/local/etc/rc.d/myx-common-zfs-quarter-cache <<- 'EOF'
 			#!/bin/sh
 			
+			# REQUIRE: DAEMON
+			# BEFORE:  LOGIN
+			# KEYWORD: nojail
+			
+			
 			. /etc/rc.subr
 			
 			name="myx-common-zfs-quarter-cache"
