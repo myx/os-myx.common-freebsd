@@ -16,16 +16,24 @@ TuneZfsQuarterCache(){
 			. /etc/rc.subr
 			
 			name="myx-common-zfs-quarter-cache"
+			rcvar="myx-common-zfs-quarter-cache_enable"
+			
 			start_cmd="/usr/local/bin/myx.common lib/tuneZfsQuarterCache"
 			stop_cmd=":"
 			
 			load_rc_config $name
-			run_rc_command "$1"
 			
+			: ${myx-common-zfs-quarter-cache_enable:=yes}
+			
+			run_rc_command "$1"
 		EOF
 		chown root:wheel /usr/local/etc/rc.d/myx-common-zfs-quarter-cache
 		chmod +x /usr/local/etc/rc.d/myx-common-zfs-quarter-cache
-		sysrc 
+	fi
+	
+	if [ "--remove" = "$1" ] ; then
+		rm /usr/local/etc/rc.d/myx-common-zfs-quarter-cache
+		return 0
 	fi
 
 	if [ "" = "$(sysctl -a | grep vfs.zfs.arc_max)" ] ; then
