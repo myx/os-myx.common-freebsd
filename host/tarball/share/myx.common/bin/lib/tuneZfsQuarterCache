@@ -37,19 +37,20 @@ TuneZfsQuarterCache(){
 	fi
 
 	if [ "" = "$(sysctl -a | grep vfs.zfs.arc_max)" ] ; then
-		echo "No ZFS ARC tunable detected." >&2
+		echo "MC-ZFS-QC: No ZFS ARC tunable detected." >&2
 		return 0
 	fi
 	
 	MEM_ALL="$( sysctl -n hw.physmem )"
-	echo "physmem: $MEM_ALL" >&2
 	NEW_ARC="$( echo "" | bc -e "$MEM_ALL / 4" )"
 	MAX_ARC="$( sysctl -n vfs.zfs.arc_max )"
 	MIN_ARC="$( sysctl -n vfs.zfs.arc_min )"
 	
 	if [ "$NEW_ARC" -lt "$MAX_ARC" -a "$MIN_ARC" -lt "$NEW_ARC" ] ; then
-		echo "setting new arc_max, $NEW_ARC" >&2
+		echo "MC-ZFS-QC: setting new arc_max, $NEW_ARC (physmem: $MEM_ALL, max-arc: $MAX_ARC)" >&2
 		sysctl vfs.zfs.arc_max=$NEW_ARC
+	else
+		echo "MC-ZFS-QC: not changing arc settings (physmem: $MEM_ALL, max-arc: $MAX_ARC)" >&2
 	fi
 }
 
