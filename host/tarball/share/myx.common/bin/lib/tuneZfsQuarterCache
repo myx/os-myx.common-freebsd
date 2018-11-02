@@ -8,6 +8,25 @@ TuneZfsQuarterCache(){
 	# sysctl -a | grep vfs\\.zfs | grep \\.arc_
 
 	UserRequireRoot "TuneZfsQuarterCache"
+	
+	if [ "--upsert" = "$1" ] ; then
+		cat > /usr/local/etc/rc.d/myx-common-zfs-quarter-cache <<- 'EOF'
+			#!/bin/sh
+			
+			. /etc/rc.subr
+			
+			name="myx-common-zfs-quarter-cache"
+			start_cmd="/usr/local/bin/myx.common lib/tuneZfsQuarterCache"
+			stop_cmd=":"
+			
+			load_rc_config $name
+			run_rc_command "$1"
+			
+		EOF
+		chown root:wheel /usr/local/etc/rc.d/myx-common-zfs-quarter-cache
+		chmod +x /usr/local/etc/rc.d/myx-common-zfs-quarter-cache
+		sysrc 
+	fi
 
 	if [ "" = "$(sysctl -a | grep vfs.zfs.arc_max)" ] ; then
 		echo "No ZFS ARC tunable detected." >&2
@@ -29,7 +48,7 @@ TuneZfsQuarterCache(){
 case "$0" in
 	*/myx.common/bin/lib/tuneZfsQuarterCache) 
 		if [ "--help" = "$1" ] ; then
-			echo "Syntax: myx.common lib/tuneZfsQuarterCache [--save/--remove]" >&2
+			echo "Syntax: myx.common lib/tuneZfsQuarterCache [--upsert/--remove]" >&2
 			exit 1
 		fi
 		set -e

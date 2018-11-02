@@ -15,6 +15,7 @@ type ReplaceLine >/dev/null 2>&1 || \
 ReplaceLine /boot/loader.conf '^autoboot_delay=*' 'autoboot_delay="2"'
 
 myx.common lib/tuneNetworkSpeed
+myx.common lib/tuneZfsQuarterCache --upsert
 
 # extra software
 myx.common install/ensure/utilBashRsyncScreenSudo curl wget
