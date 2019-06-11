@@ -1,0 +1,94 @@
+#!/bin/sh
+
+##### !!! THIS SCRIPT MUST BE OVERRIDEN IN OS-DEPENDENT IMPLEMENTATION !!! #####
+
+GrowSlashFsUfs(){
+	local DISK="$1"
+	local PART="$2"
+	local INDX="$3"
+	local SWAP="$4"
+
+	if [ "$DISK" = "" ] || [ "$PART" = "" ] ; then
+		local DISKS="$DISK vtbd0 da0"
+		for DSK in $DISKS
+		do
+			if [ "`geom disk status -s $DSK`" != "" ] ; then
+				local PARTS="${DSK}s1 $DSK"
+				for PRT in $PARTS
+				do
+					if [ "`gpart status -s $PRT`" != "" ] && [ "`gpart show $PRT | grep freebsd-ufs`" != "" ] ; then
+						GrowSlashFsUfs $DSK $PRT
+						return 0;
+					fi
+				done
+				
+			fi
+		done
+		
+		echo "Failed: can't detect device and partition (yet)" >&2
+		return 1;
+	fi
+	
+	if [ "$INDX" = "" ] ; then
+		INDX="`gpart show $PART | grep freebsd-ufs | awk '{print $3}'`"
+	fi
+	
+	if [ "$SWAP" = "" ] ; then
+		SWAP="`gpart show $PART | grep freebsd-swap | awk '{print $3}'`"
+	fi
+
+
+	echo "Grow: disk: $DISK, part: $PART, indx: $INDX, swap: $SWAP" >&2
+
+	if [ "$INDX" = "" ] ; then
+		echo "Failed: can't detect partition index (yet?)" >&2
+		return 1;
+	fi
+
+	sysctl -w kern.geom.debugflags=16
+	sysctl -w kern.geom.part.auto_resize=1
+	camcontrol rescan all
+	devctl rescan pci0
+
+	gpart recover $DISK
+	gpart resize -i $INDX $DISK
+	gpart resize -i $INDX $PART
+
+	if [ "$SWAP" != "" ] ; then
+		swapoff -a
+		gpart delete -i $SWAP $PART
+		# gpart resize -i $INDX -s 29G $PART 
+		# gpart resize -i $INDX -s 78G $PART
+		gpart add -t freebsd-swap -a 4k $PART
+		swapon -a
+	fi
+	if [ "$SWAP" = "" ] ; then
+		gpart resize -i $INDX $PART
+		gpart resize -i $INDX $PART
+	fi
+	
+	gpart commit $PART
+	gpart commit $DISK
+
+	service growfs onestart
+	sysctl -w kern.geom.debugflags=0
+
+	return 0;
+}
+
+
+case "$0" in
+	*/myx.common/bin/os/growSlashFsUfs) 
+		if [ "$1" = "--help" ] ; then
+			echo "Syntax: myx.common os/growSlashFsUfs --yes" >&2
+			echo "    or: myx.common os/growSlashFsUfs diskName sliceName [ufs-partition-index [swap-partition-index]]" >&2
+			exit 1
+		fi
+		set -e
+		if [ "$1" = "--yes" ] ; then
+			GrowSlashFsUfs
+			exit 0
+		fi
+		GrowSlashFsUfs "$@"
+	;;
+esac
