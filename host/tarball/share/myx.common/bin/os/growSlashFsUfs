@@ -2,11 +2,23 @@
 
 ##### !!! THIS SCRIPT MUST BE OVERRIDEN IN OS-DEPENDENT IMPLEMENTATION !!! #####
 
+GrowSlashFsUfsUsedSize(){
+	local PART="$1"
+	gpart show $PART | grep 'freebsd-ufs' | awk '{print $5}' | grep G | sed 's/[^0-9\.]*//g'
+}
+
+GrowSlashFsUfsFreeSize(){
+	local PART="$1"
+	echo `gpart show $PART | grep ' free -' | awk '{print $6}' | grep G | sed 's/[^0-9\.]*//g'` 0 | awk '{print $1}'
+}
+
 GrowSlashFsUfs(){
 	local DISK="$1"
 	local PART="$2"
 	local INDX="$3"
 	local SWAP="$4"
+
+	set -e
 
 	if [ "$DISK" = "" ] || [ "$PART" = "" ] ; then
 		local DISKS="$DISK vtbd0 da0"
@@ -27,6 +39,17 @@ GrowSlashFsUfs(){
 		
 		echo "Failed: can't detect device and partition (yet)" >&2
 		return 1;
+	else
+		if [ "`geom disk status -s $DISK`" != "" ] ; then
+		else
+			echo "Failed: specified disk is invalid: $DISK" >&2
+			return 1;
+		fi
+		if [ "`gpart status -s $PART`" != "" ] && [ "`gpart show $PART | grep freebsd-ufs`" != "" ] ; then
+		else
+			echo "Failed: specified part is invalid (or does't contain UFS filesystem): $PART" >&2
+			return 1;
+		fi
 	fi
 	
 	if [ "$INDX" = "" ] ; then
@@ -44,7 +67,7 @@ GrowSlashFsUfs(){
 		echo "Failed: can't detect partition index (yet?)" >&2
 		return 1;
 	fi
-
+	
 	sysctl -w kern.geom.debugflags=16
 	sysctl -w kern.geom.part.auto_resize=1
 	camcontrol rescan all
@@ -54,11 +77,23 @@ GrowSlashFsUfs(){
 	gpart resize -i $INDX $DISK
 	gpart resize -i $INDX $PART
 
+	local SIZE_NOW="`GrowSlashFsUfsUsedSize $PART`"
+	echo "Current size: ${SIZE_NOW}G" >&2
+
 	if [ "$SWAP" != "" ] ; then
 		swapoff -a
 		gpart delete -i $SWAP $PART
-		# gpart resize -i $INDX -s 29G $PART 
-		# gpart resize -i $INDX -s 78G $PART
+		
+		## TODO: calculate new size and check that it is bigger than current
+		local SIZE_AVL="`GrowSlashFsUfsFreeSize $PART`"
+		echo "Free size: ${SIZE_AVL}G" >&2
+
+		local SIZE_NEW="`echo "x = $SIZE_NOW + $SIZE_AVL - 1; scale=0; x/1" | bc`"
+		
+		echo "New size: ${SIZE_NEW}G" >&2
+		
+		gpart resize -i $INDX -s ${SIZE_NEW}G $PART || true
+		 
 		gpart add -t freebsd-swap -a 4k $PART
 		swapon -a
 	fi
@@ -67,15 +102,15 @@ GrowSlashFsUfs(){
 		gpart resize -i $INDX $PART
 	fi
 	
-	gpart commit $PART
-	gpart commit $DISK
+	#gpart commit $PART
+	#gpart commit $DISK
 
 	service growfs onestart
 	sysctl -w kern.geom.debugflags=0
 
 	return 0;
 }
-
+			GrowSlashFsUfs
 
 case "$0" in
 	*/myx.common/bin/os/growSlashFsUfs) 
