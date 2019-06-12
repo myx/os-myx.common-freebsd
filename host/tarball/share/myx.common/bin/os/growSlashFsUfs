@@ -110,7 +110,6 @@ GrowSlashFsUfs(){
 
 	return 0;
 }
-			GrowSlashFsUfs
 
 case "$0" in
 	*/myx.common/bin/os/growSlashFsUfs) 
