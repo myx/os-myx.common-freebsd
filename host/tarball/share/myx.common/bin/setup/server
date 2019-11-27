@@ -34,7 +34,18 @@ sysrc \
 #	powerd_enable=YES \
 
 
-# update NTP date NOW!
-ntpdate -u -b pool.ntp.org || true
+type Prefix >/dev/null 2>&1 || \
+	. "/usr/local/share/myx.common/bin/lib/prefix"
+
+svc-ntpd(){
+	# update NTP date NOW!
+	chown ntpd:ntpd /var/db/ntp/ntpd.pid
+	service ntpd stop || echo "ntpd daemon is not running!"
+	sleep 1
+	ntpdate -u -b pool.ntp.org || true
+	service ntpd start || true
+}
+
+Prefix "ntpd" svc-ntpd
 
 test "$1" != "--postfix-mta" || myx.common lib/installPostfixMTA 
