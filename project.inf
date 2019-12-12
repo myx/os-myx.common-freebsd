@@ -7,6 +7,7 @@ Provides: \
 	deploy-export:project-source.tgz:github.com/myx/os-myx.common-freebsd/archive/master.tar.gz \
 	deploy-export:sh-scripts/install-myx.common-freebsd.sh:myx.ru/distro/farm-general/myx.common/install-bsd.sh \
 	deploy-export:sh-scripts/install-myx.common-freebsd.sh:raw.githubusercontent.com/myx/os-myx.common-freebsd/master/sh-scripts/install-myx.common-freebsd.sh \
+	deploy-keyword:freebsd \
 
 Augments: 
 Suggests: 
