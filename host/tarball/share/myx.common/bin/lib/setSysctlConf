@@ -36,7 +36,7 @@ SetSysctlConf(){
 			return 0
 		fi
 	
-		if [ "$VALUE" -ne "$CURRENT" ] ; then 
+		if [ "$VALUE" != "$CURRENT" ] ; then 
 			sysctl "$PARAM=$VALUE" && ReplaceLine /etc/sysctl.conf "^$PARAM=*" "$PARAM=$VALUE" || true
 		fi
 	else
