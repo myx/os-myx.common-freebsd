@@ -8,11 +8,11 @@ type ReplaceLine >/dev/null 2>&1 || \
 SetSysctlConf(){
 	local PARAM="$1"
 	
-	if [ "$2" == "--grow" ] ; then
+	if [ "$2" = "--grow" ] ; then
 		local GROW="TRUE"
 		shift
 	fi
-	if [ "$2" == "--shrink" ] ; then
+	if [ "$2" = "--shrink" ] ; then
 		local SHRINK="TRUE"
 		shift
 	fi
