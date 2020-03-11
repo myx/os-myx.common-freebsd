@@ -11,23 +11,23 @@ type SetSysctlConf >/dev/null 2>&1 || \
 	. "/usr/local/share/myx.common/bin/lib/setSysctlConf"
 
 
-SetSysctlConf kern.ipc.soacceptqueue --grow 2048
-SetSysctlConf kern.ipc.somaxconn --grow 1024
-SetSysctlConf net.inet.tcp.msl --shrink 10000
-SetSysctlConf kern.maxfiles --grow 999999
-SetSysctlConf kern.ipc.maxsockets --grow 888888
+SetSysctlConf kern.ipc.soacceptqueue --grow 2048 || true
+SetSysctlConf kern.ipc.somaxconn --grow 1024 || true
+SetSysctlConf net.inet.tcp.msl --shrink 10000 || true
+SetSysctlConf kern.maxfiles --grow 999999 || true
+SetSysctlConf kern.ipc.maxsockets --grow 888888 || true
 
-SetSysctlConf net.inet.tcp.nolocaltimewait 1
-SetSysctlConf net.inet.tcp.maxtcptw 16384
-SetSysctlConf net.inet.tcp.msl --shrink 8000
+SetSysctlConf net.inet.tcp.nolocaltimewait 1 || true
+SetSysctlConf net.inet.tcp.maxtcptw --shrink 16384 || true
+SetSysctlConf net.inet.tcp.msl --shrink 8000 || true
 
-SetSysctlConf net.inet.ip.portrange.first --shrink 1024
-SetSysctlConf net.inet.ip.portrange.last --grow 65535
-SetSysctlConf net.inet.tcp.fast_finwait2_recycle 1
-SetSysctlConf net.inet.tcp.finwait2_timeout --shrink 3000
+SetSysctlConf net.inet.ip.portrange.first --shrink 1024 || true
+SetSysctlConf net.inet.ip.portrange.last --grow 65535 || true
+SetSysctlConf net.inet.tcp.fast_finwait2_recycle 1 || true
+SetSysctlConf net.inet.tcp.finwait2_timeout --shrink 3000 || true
 
-SetSysctlConf net.bpf.optimize_writers 1
+SetSysctlConf net.bpf.optimize_writers 1 || true
 
-SetSysctlConf net.inet.tcp.blackhole 2
-SetSysctlConf net.inet.udp.blackhole 1
-SetSysctlConf net.inet.ip.redirect 0
+SetSysctlConf net.inet.tcp.blackhole 2 || true
+SetSysctlConf net.inet.udp.blackhole 1 || true
+SetSysctlConf net.inet.ip.redirect 0 || true
