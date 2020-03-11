@@ -27,13 +27,13 @@ SetSysctlConf(){
 			if [ "$VALUE" -gt "$CURRENT" ] ; then 
 				sysctl "$PARAM=$VALUE" && ReplaceLine /etc/sysctl.conf "^$PARAM=*" "$PARAM=$VALUE" || true
 			fi
-			exit 0
+			return 0
 		fi
 		if [ "$SHRINK" = "TRUE" ] ; then
 			if [ "$VALUE" -lt "$CURRENT" ] ; then 
 				sysctl "$PARAM=$VALUE" && ReplaceLine /etc/sysctl.conf "^$PARAM=*" "$PARAM=$VALUE" || true
 			fi
-			exit 0
+			return 0
 		fi
 	
 		if [ "$VALUE" -ne "$CURRENT" ] ; then 
