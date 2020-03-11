@@ -8,6 +8,10 @@ if [ "$2" == "--grow" ] ; then
 	GROW="TRUE"
 	shift
 fi
+if [ "$2" == "--shrink" ] ; then
+	SHRINK="TRUE"
+	shift
+fi
 
 VALUE="$2"
 
@@ -19,12 +23,18 @@ if sysctl -n "$PARAM" > /dev/null 2>&1 ; then
 		if [ "$VALUE" -gt "$CURRENT" ] ; then 
 			sysctl "$PARAM=$VALUE" && myx.common lib/replaceLine /etc/sysctl.conf "^$PARAM=*" "$PARAM=$VALUE" || true
 		fi
-	else
-		if [ "$VALUE" = "$CURRENT" ] ; then 
+		exit 0
+	fi
+	if [ "$SHRINK" = "TRUE" ] ; then
+		if [ "$VALUE" -lt "$CURRENT" ] ; then 
 			sysctl "$PARAM=$VALUE" && myx.common lib/replaceLine /etc/sysctl.conf "^$PARAM=*" "$PARAM=$VALUE" || true
 		fi
+		exit 0
 	fi
 
+	if [ "$VALUE" -ne "$CURRENT" ] ; then 
+		sysctl "$PARAM=$VALUE" && myx.common lib/replaceLine /etc/sysctl.conf "^$PARAM=*" "$PARAM=$VALUE" || true
+	fi
 else
 
 	echo "sysctl oid $PARAM in not supported!" >&2
