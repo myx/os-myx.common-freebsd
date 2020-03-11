@@ -5,6 +5,21 @@ type UserRequireRoot >/dev/null 2>&1 || \
 
 UserRequireRoot "reset/ipfw"
 
-ipfw delete 1
-ipfw add 1 set 31 allow tcp from any to me dst-port 22,53,80,443
-ipfw add 1 set 31 allow udp from any to me dst-port 53
+ResetIpfw(){
+	ipfw delete 1
+	ipfw add 1 set 31 allow tcp from any to me dst-port 22,53,80,443
+	ipfw add 1 set 31 allow udp from any to me dst-port 53
+}
+
+
+case "$0" in
+	*/myx.common/bin/reset/ipfw) 
+		if [ "$1" = "--help" ] ; then
+			echo "Syntax: myx.common reset/ipfw" >&2
+			exit 1
+		fi
+		set -e
+		ResetIpfw "$@"
+	;;
+esac
+

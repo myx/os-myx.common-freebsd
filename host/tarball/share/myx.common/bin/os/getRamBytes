@@ -2,7 +2,7 @@
 
 ##### !!! THIS SCRIPT MUST BE OVERRIDEN IN OS-DEPENDENT IMPLEMENTATION !!! #####
 
-GetRamBytes(){
+OsGetRamBytes(){
 	sysctl -nq hw.realmem || sysctl -nq hw.physmem
 }
 
@@ -14,6 +14,6 @@ case "$0" in
 			exit 1
 		fi
 		set -e
-		GetRamBytes "$@"
+		OsGetRamBytes "$@"
 	;;
 esac

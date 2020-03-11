@@ -7,37 +7,13 @@ type UserRequireRoot >/dev/null 2>&1 || \
 
 UserRequireRoot
 
-myx.common setup/machine
-
 type ReplaceLine >/dev/null 2>&1 || \
 	. "/usr/local/share/myx.common/bin/lib/replaceLine"
-
-ReplaceLine /boot/loader.conf '^autoboot_delay=*' 'autoboot_delay="2"'
-
-myx.common lib/tuneNetworkSpeed
-myx.common lib/tuneZfsQuarterCache --upsert
-
-# extra software
-myx.common install/ensure/utilBashRsyncScreenSudo curl wget
-
-ReplaceLine /usr/local/etc/sudoers '^%wheel ALL=*' '%wheel ALL=(ALL) ALL'
-
-# rc.conf
-sysrc \
-	sshd_enable=YES \
-	moused_enable=YES \
-	ntpd_enable=YES \
-	ntpdate_enable=YES \
-	fsck_y_enable=YES
-
-# Deliberately excluded:
-#	powerd_enable=YES \
-
 
 type Prefix >/dev/null 2>&1 || \
 	. "/usr/local/share/myx.common/bin/lib/prefix"
 
-svc-ntpd(){
+SetupServerNtpdSvc(){
 	# update NTP date NOW!
 	chown ntpd:ntpd /var/db/ntp/ntpd.pid
 	service ntpd stop || echo "ntpd daemon is not running!"
@@ -46,6 +22,47 @@ svc-ntpd(){
 	service ntpd start || true
 }
 
-Prefix "ntpd" svc-ntpd
 
-test "$1" != "--postfix-mta" || myx.common lib/installPostfixMTA 
+SetupServer(){
+	myx.common setup/machine
+	
+	ReplaceLine /boot/loader.conf '^autoboot_delay=*' 'autoboot_delay="2"'
+	
+	myx.common tune/networkSpeed
+	myx.common tune/zfsQuarterCache --upsert
+	
+	# extra software
+	myx.common install/ensure/utilBashRsyncScreenSudo curl wget
+	
+	ReplaceLine /usr/local/etc/sudoers '^%wheel ALL=*' '%wheel ALL=(ALL) ALL'
+	
+	# rc.conf
+	sysrc \
+		sshd_enable=YES \
+		moused_enable=YES \
+		ntpd_enable=YES \
+		ntpdate_enable=YES \
+		fsck_y_enable=YES
+	
+	# Deliberately excluded:
+	#	powerd_enable=YES \
+	
+	
+	Prefix "ntpd" SetupServerNtpdSvc
+	
+	test "$1" != "--postfix-mta" || myx.common os/installPostfixMTA 
+}
+
+
+case "$0" in
+	*/myx.common/bin/setup/server) 
+		if [ "$1" = "--help" ] ; then
+			echo "Syntax: myx.common setup/server [--postfix-mta]" >&2
+			exit 1
+		fi
+		set -e
+		SetupServer "$@"
+	;;
+esac
+
+

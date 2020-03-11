@@ -23,7 +23,7 @@ TuneZfsQuarterCache(){
 			name="myx-common-zfs-quarter-cache"
 			rcvar="myx_common_zfsQuarterCache_enable"
 			
-			start_cmd="/usr/local/bin/myx.common lib/tuneZfsQuarterCache"
+			start_cmd="/usr/local/bin/myx.common tune/zfsQuarterCache"
 			stop_cmd=":"
 			
 			load_rc_config $name
@@ -62,10 +62,10 @@ TuneZfsQuarterCache(){
 }
 
 case "$0" in
-	*/myx.common/bin/lib/tuneZfsQuarterCache) 
+	*/myx.common/bin/tune/zfsQuarterCache) 
 		if [ "--help" = "$1" ] ; then
 			# TuneZfsQuarterCache --upsert
-			echo "Syntax: myx.common lib/tuneZfsQuarterCache [--upsert/--remove]" >&2
+			echo "Syntax: myx.common tune/zfsQuarterCache [--upsert/--remove]" >&2
 			exit 1
 		fi
 		set -e
