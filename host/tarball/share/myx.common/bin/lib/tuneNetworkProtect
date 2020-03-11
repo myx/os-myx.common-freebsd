@@ -10,4 +10,6 @@ UserRequireRoot
 type ReplaceLine >/dev/null 2>&1 || \
 	. "/usr/local/share/myx.common/bin/lib/replaceLine"
 
-ReplaceLine /etc/sysctl.conf '^net.inet.udp.blackhole=*' 'net.inet.udp.blackhole=1'
+myx.common lib/setSysctlConf net.inet.tcp.blackhole 2
+myx.common lib/setSysctlConf net.inet.udp.blackhole 1
+myx.common lib/setSysctlConf net.inet.ip.redirect 0

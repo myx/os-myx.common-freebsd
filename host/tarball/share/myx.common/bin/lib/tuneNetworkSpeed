@@ -10,6 +10,24 @@ UserRequireRoot
 type ReplaceLine >/dev/null 2>&1 || \
 	. "/usr/local/share/myx.common/bin/lib/replaceLine"
 
-ReplaceLine /etc/sysctl.conf '^kern.ipc.soacceptqueue=*' 'kern.ipc.soacceptqueue=1024'
-ReplaceLine /etc/sysctl.conf '^net.inet.tcp.msl=*' 'net.inet.tcp.msl=10000'
-ReplaceLine /etc/sysctl.conf '^kern.maxfiles=*' 'kern.maxfiles=999999'
+
+myx.common lib/setSysctlConf kern.ipc.soacceptqueue --grow 2048
+myx.common lib/setSysctlConf kern.ipc.somaxconn --grow 1024
+myx.common lib/setSysctlConf net.inet.tcp.msl --shrink 10000
+myx.common lib/setSysctlConf kern.maxfiles --grow 999999
+myx.common lib/setSysctlConf kern.ipc.maxsockets --grow 888888
+
+myx.common lib/setSysctlConf net.inet.tcp.nolocaltimewait 1
+myx.common lib/setSysctlConf net.inet.tcp.maxtcptw 16384
+myx.common lib/setSysctlConf net.inet.tcp.msl --shrink 8000
+
+myx.common lib/setSysctlConf net.inet.ip.portrange.first --shrink 1024
+myx.common lib/setSysctlConf net.inet.ip.portrange.last --grow 65535
+myx.common lib/setSysctlConf net.inet.tcp.fast_finwait2_recycle 1
+myx.common lib/setSysctlConf net.inet.tcp.finwait2_timeout --shrink 3000
+
+myx.common lib/setSysctlConf net.bpf.optimize_writers 1
+
+myx.common lib/setSysctlConf net.inet.tcp.blackhole 2
+myx.common lib/setSysctlConf net.inet.udp.blackhole 1
+myx.common lib/setSysctlConf net.inet.ip.redirect 0
