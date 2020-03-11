@@ -7,9 +7,9 @@ type UserRequireRoot >/dev/null 2>&1 || \
 
 UserRequireRoot
 
-type ReplaceLine >/dev/null 2>&1 || \
-	. "/usr/local/share/myx.common/bin/lib/replaceLine"
+type SetSysctlConf >/dev/null 2>&1 || \
+	. "/usr/local/share/myx.common/bin/lib/setSysctlConf"
 
-myx.common lib/setSysctlConf net.inet.tcp.blackhole 2
-myx.common lib/setSysctlConf net.inet.udp.blackhole 1
-myx.common lib/setSysctlConf net.inet.ip.redirect 0
+SetSysctlConf net.inet.tcp.blackhole 2
+SetSysctlConf net.inet.udp.blackhole 1
+SetSysctlConf net.inet.ip.redirect 0
