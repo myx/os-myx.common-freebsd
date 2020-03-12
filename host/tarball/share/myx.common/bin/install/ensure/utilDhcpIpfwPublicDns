@@ -14,10 +14,6 @@ type UserRequireRoot >/dev/null 2>&1 || \
 
 UserRequireRoot 
 
-LIST=""
 
-for PKG in bash rsync screen sudo $@ ; do
-	[ ! -z "`which $PKG`" ] && echo "ensure: $PKG already present, skip" >&2 || LIST="$LIST $PKG"
-done
-
-[ -z "$LIST" ] && echo "all packages installed." >&2 || pkg install -y $LIST
+echo "NOT IMPLEMENTED YET" >&2
+exit 1
