@@ -1,0 +1,6 @@
+bash	bash
+java	openjdk13
+git		git		
+go		go
+nano	nano
+rsync	rsync
