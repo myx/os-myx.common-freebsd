@@ -36,6 +36,13 @@ SetupServer(){
 	
 	ReplaceLine /usr/local/etc/sudoers '^%wheel ALL=*' '%wheel ALL=(ALL) ALL'
 	
+	#
+	# WTF? But still have homes that differ on 
+	# my freebsds (like its depends on ZFS/UFS)
+	#
+	[ -d "/usr/home" -a ! -d "/home" ] && ln -s /usr/home /home
+	[ ! -d "/usr/home" -a -d "/home" ] && ln -s /home /usr/home
+	
 	# rc.conf
 	sysrc \
 		sshd_enable=YES \
