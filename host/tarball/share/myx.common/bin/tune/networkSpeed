@@ -13,20 +13,27 @@ type SetSysctlConf >/dev/null 2>&1 || \
 TuneNetworkSpeed(){
 	set -e
 	
-	SetSysctlConf kern.ipc.soacceptqueue --grow 2048 || true
+	SetSysctlConf kern.ipc.soacceptqueue --grow 1024 || true
 	SetSysctlConf kern.ipc.somaxconn --grow 1024 || true
 	SetSysctlConf net.inet.tcp.msl --shrink 10000 || true
 	SetSysctlConf kern.maxfiles --grow 999999 || true
 	SetSysctlConf kern.ipc.maxsockets --grow 888888 || true
 	
 	SetSysctlConf net.inet.tcp.nolocaltimewait 1 || true
-	SetSysctlConf net.inet.tcp.maxtcptw --shrink 16384 || true
-	SetSysctlConf net.inet.tcp.msl --shrink 8000 || true
+	SetSysctlConf net.inet.tcp.maxtcptw --shrink 8192 || true
+	SetSysctlConf net.inet.tcp.msl --shrink 5000 || true
+	
+	SetSysctlConf net.inet.tcp.icmp_may_rst 0 || true
+	
+	SetSysctlConf net.inet.tcp.keepidle --shrink 300000 || true
+	SetSysctlConf net.inet.tcp.keepintvl --shrink 5000 || true
+	SetSysctlConf net.inet.tcp.keepcnt --shrink 1 || true
+	
 	
 	SetSysctlConf net.inet.ip.portrange.first --shrink 1024 || true
 	SetSysctlConf net.inet.ip.portrange.last --grow 65535 || true
 	SetSysctlConf net.inet.tcp.fast_finwait2_recycle 1 || true
-	SetSysctlConf net.inet.tcp.finwait2_timeout --shrink 3000 || true
+	SetSysctlConf net.inet.tcp.finwait2_timeout --shrink 1000 || true
 	
 	SetSysctlConf net.bpf.optimize_writers 1 || true
 	
