@@ -5,7 +5,7 @@ set -e
 type UserRequireRoot >/dev/null 2>&1 || \
 	. "/usr/local/share/myx.common/bin/user/requireRoot"
 
-UserRequireRoot
+UserRequireRoot "setup/server"
 
 type ReplaceLine >/dev/null 2>&1 || \
 	. "/usr/local/share/myx.common/bin/lib/replaceLine"
