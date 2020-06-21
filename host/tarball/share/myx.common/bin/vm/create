@@ -1,0 +1,21 @@
+#!/bin/sh
+
+##### !!! THIS SCRIPT MUST BE OVERRIDEN IN OS-DEPENDENT IMPLEMENTATION !!! #####
+
+VmCreate(){
+	vm list --all
+}
+
+case "$0" in
+	*/myx.common/bin/vm/create) 
+		if [ "$1" = "--help" ] ; then
+			echo "Syntax: myx.common vm/create <name> <cores> <ram> <disk> --lan <mac-address> <iso>" >&2
+			echo "Examples:" >&2
+			echo "	myx.common vm/create bb1-h3  8  8192M 120G --lan 52:54:20:25:20:30 --linux ubuntu-20.04-live-server-amd64.iso" >&2
+			echo "	myx.common vm/create dss-h3  8  8192M 120G --lan 52:54:20:25:20:30 --freebsd ubuntu-20.04-live-server-amd64.iso" >&2
+			exit 1
+		fi
+		set -e
+		VmList "$@"
+	;;
+esac
