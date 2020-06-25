@@ -16,7 +16,7 @@ VmCreate(){
     if [ -z "$( vm list --all | egrep "^$VMNAME\W" )" ] ; then
 		case "$VMTYPE" in
 			--freebsd)
-				sed -e 's/^[ \t]*//' > "/vms/.templates/$VMNAME.conf" <<- "EOF";
+				sed -e 's/^[ \t]*//' > "/vms/.templates/$VMNAME.conf" <<- EOF;
 				    loader="bhyveload"
 				    network0_type="virtio-net"
 				    network0_switch="$VMLAN"
@@ -27,7 +27,7 @@ VmCreate(){
 				EOF
 				;;
 			--linux)
-				sed -e 's/^[ \t]*//' > "/vms/.templates/$VMNAME.conf" <<- "EOF";
+				sed -e 's/^[ \t]*//' > "/vms/.templates/$VMNAME.conf" <<- EOF;
 				    loader="grub"
 				    network0_type="virtio-net"
 				    network0_switch="$VMLAN"
@@ -45,7 +45,7 @@ VmCreate(){
 		esac
     	
         vm create -t "$VMNAME" -c "$VMCPU" -m "$VMRAM" -s "$VMHDD" "$VMNAME"
-		sysrc -f "/vms/$VMNAME/$VMNAME.conf" network0_mac="VMMAC"
+		sysrc -f "/vms/$VMNAME/$VMNAME.conf" network0_mac="$VMMAC"
         vm install "$VMNAME" "$VMISO"
         echo "VM created, to continue installation, run: vm console $VMNAME"
     fi
