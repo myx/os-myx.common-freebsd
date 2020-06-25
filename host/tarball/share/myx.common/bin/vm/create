@@ -3,7 +3,53 @@
 ##### !!! THIS SCRIPT MUST BE OVERRIDEN IN OS-DEPENDENT IMPLEMENTATION !!! #####
 
 VmCreate(){
-	vm list --all
+    local \
+    	VMTYPE="$1" \
+    	VMNAME="$2" \
+    	VMCPUS="$3" \
+    	VMRAM="$4" \
+    	VMHDD="$5" \
+    	VMLAN="$6" \
+    	VMMAC="$7" \
+    	VMISO="$8"
+    	
+    if [ -z "$( vm list --all | egrep "^$VMNAME\W" )" ] ; then
+		case "$VMTYPE" in
+			--freebsd)
+				sed -e 's/^[ \t]*//' > "/vms/.templates/$VMNAME.conf" <<- 'EOF';
+				    loader="bhyveload"
+				    network0_type="virtio-net"
+				    network0_switch="$VMLAN"
+				    network0_mac="$VMMAC"
+				    disk0_type="virtio-blk"
+				    disk0_name="disk0"
+				    disk0_dev="sparse-zvol"
+				EOF
+				;;
+			--linux)
+				sed -e 's/^[ \t]*//' > "/vms/.templates/$VMNAME.conf" <<- 'EOF';
+				    loader="grub"
+				    network0_type="virtio-net"
+				    network0_switch="$VMLAN"
+				    network0_mac="$VMMAC"
+				    disk0_type="virtio-blk"
+				    disk0_name="disk0.img"
+				EOF
+				;;
+				
+			*)
+				echo "Error: vm/create: Unknown vm type: $VMTYPE" >&2
+			    return 1
+			    ;;
+				
+		esac
+    	
+        vm create -t "$VMNAME" -c "$VMCPU" -m "$VMRAM" -s "$VMHDD" "$VMNAME"
+		sysrc -f "/vms/$VMNAME/$VMNAME.conf" network0_mac="VMMAC"
+        vm install "$VMNAME" "$VMISO"
+        echo "VM created, to continue installation, run: vm console $VMNAME"
+    fi
+    sysrc vm_list+="$VMNAME"                 # add/update anyway 
 }
 
 case "$0" in
@@ -11,8 +57,8 @@ case "$0" in
 		if [ "$1" = "--help" ] ; then
 			echo "Syntax: myx.common vm/create <name> <cores> <ram> <disk> --lan <mac-address> <iso>" >&2
 			echo "Examples:" >&2
-			echo "	myx.common vm/create bb1-h3  8  8192M 120G --lan 52:54:20:25:20:30 --linux ubuntu-20.04-live-server-amd64.iso" >&2
-			echo "	myx.common vm/create dss-h3  8  8192M 120G --lan 52:54:20:25:20:30 --freebsd ubuntu-20.04-live-server-amd64.iso" >&2
+			echo "	myx.common vm/create --linux   bb1-h3  8  8192M 120G lan22 52:54:20:25:20:30 ubuntu-20.04-live-server-amd64.iso" >&2
+			echo "	myx.common vm/create --freebsd dss-h3  8  8192M 120G lan22 52:54:20:25:20:32 FreeBSD-12.1-RELEASE-amd64-disc1.iso" >&2
 			exit 1
 		fi
 		set -e
