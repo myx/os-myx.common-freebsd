@@ -44,7 +44,7 @@ VmCreate(){
 				
 		esac
     	
-        vm create -t "$VMNAME" -c "$VMCPU" -m "$VMRAM" -s "$VMHDD" "$VMNAME"
+        vm create -t "$VMNAME" -c "$VMCPUS" -m "$VMRAM" -s "$VMHDD" "$VMNAME"
 		sysrc -f "/vms/$VMNAME/$VMNAME.conf" network0_mac="$VMMAC"
         vm install "$VMNAME" "$VMISO"
         echo "VM created, to continue installation, run: vm console $VMNAME"
