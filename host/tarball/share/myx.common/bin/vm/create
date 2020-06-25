@@ -14,14 +14,11 @@ VmCreate(){
     	VMISO="$8"
     	
     if [ -z "$( vm list --all | egrep "^$VMNAME\W" )" ] ; then
+
 		case "$VMTYPE" in
 			--freebsd)
 				sed -e 's/^[ \t]*//' > "/vms/.templates/$VMNAME.conf" <<- EOF;
 				    loader="bhyveload"
-				    network0_type="virtio-net"
-				    network0_switch="$VMLAN"
-				    network0_mac="$VMMAC"
-				    disk0_type="virtio-blk"
 				    disk0_name="disk0"
 				    disk0_dev="sparse-zvol"
 				EOF
@@ -29,10 +26,6 @@ VmCreate(){
 			--linux)
 				sed -e 's/^[ \t]*//' > "/vms/.templates/$VMNAME.conf" <<- EOF;
 				    loader="grub"
-				    network0_type="virtio-net"
-				    network0_switch="$VMLAN"
-				    network0_mac="$VMMAC"
-				    disk0_type="virtio-blk"
 				    disk0_name="disk0.img"
 				EOF
 				;;
@@ -44,12 +37,30 @@ VmCreate(){
 				
 		esac
     	
+		sysrc -f "/vms/.templates/$VMNAME.conf"	\
+			disk0_type="virtio-blk"				\
+		    network0_type="virtio-net"			\
+			network0_switch="$VMLAN"			\
+			network0_mac="$VMMAC"				\
+		;
         vm create -t "$VMNAME" -c "$VMCPUS" -m "$VMRAM" -s "$VMHDD" "$VMNAME"
 		sysrc -f "/vms/$VMNAME/$VMNAME.conf" network0_mac="$VMMAC"
+	    sysrc vm_list+="$VMNAME" 
         vm install "$VMNAME" "$VMISO"
-        echo "VM created, to continue installation, run: vm console $VMNAME"
+        echo "VM created, to continue installation, run: vm console $VMNAME" >&2
+        
+    elif [ -f "/vms/$VMNAME/$VMNAME.conf" ] ; then
+
+		sysrc -f "/vms/$VMNAME/$VMNAME.conf"	\
+			cpu="$VMCPUS"						\
+			memory="$VMRAM"						\
+			network0_switch="$VMLAN"			\
+			network0_mac="$VMMAC"				\
+		;
+	    sysrc vm_list+="$VMNAME"                # add/update anyway 
+        echo "VM configuration updated, to see settings, run: vm configure $VMNAME" >&2
+
     fi
-    sysrc vm_list+="$VMNAME"                 # add/update anyway 
 }
 
 case "$0" in
