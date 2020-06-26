@@ -3,15 +3,48 @@
 ##### !!! THIS SCRIPT MUST BE OVERRIDEN IN OS-DEPENDENT IMPLEMENTATION !!! #####
 
 VmCreate(){
-    local \
-    	VMTYPE="$1" \
-    	VMNAME="$2" \
-    	VMCPUS="$3" \
-    	VMRAM="$4" \
-    	VMHDD="$5" \
-    	VMLAN="$6" \
-    	VMMAC="$7" \
-    	VMISO="$8"
+    local VMTYPE="$1" ; shift
+    local VMNAME="$1" ; shift
+    local VMCPUS="$1" ; shift
+    local VMRAM="$1"  ; shift
+    local VMHDD="$1"  ; shift
+    	
+    if [ -z "$VMTYPE" -o -z "$VMNAME" -o -z "$VMCPUS" -o -z "$VMRAM" -o -z "$VMHDD" ] ; then
+		echo "Syntax error: vm/create: check arguments." >&2
+		return 1
+    fi
+    
+    
+    local VMLAN0=""
+    local VMMAC0=""
+    local VMLAN1=""
+    local VMMAC1=""
+    
+    if [ "$1" -eq "--net" ] ; then
+    	shift;
+    	VMLAN0="$1" ; shift
+    	VMMAC0="$1" ; shift
+	    if [ -z "$VMLAN0" -o -z "$VMMAC0" ] ; then
+			echo "Syntax error: vm/create: network #1: invalid arguments" >&2
+			return 1
+	    fi
+    fi
+    
+    if [ "$1" -eq "--net" ] ; then
+    	shift;
+    	VMLAN1="$1" ; shift
+    	VMMAC1="$1" ; shift
+	    if [ -z "$VMLAN1" -o -z "$VMMAC1" ] ; then
+			echo "Syntax error: vm/create: network #2: invalid arguments" >&2
+			return 1
+	    fi
+    fi
+    
+    local VMISO="$1" ; shift
+    if [ -z "$VMISO" ] ; then
+		echo "Syntax error: vm/create: iso image: invalid arguments" >&2
+		return 1
+    fi
     	
     if [ -z "$( vm list --all | egrep "^$VMNAME\W" )" ] ; then
 
@@ -39,10 +72,23 @@ VmCreate(){
     	
 		sysrc -f "/vms/.templates/$VMNAME.conf"	\
 			disk0_type="virtio-blk"				\
-		    network0_type="virtio-net"			\
-			network0_switch="$VMLAN"			\
-			network0_mac="$VMMAC"				\
 		;
+		
+		if [ ! -z "$VMLAN0" ] ; then
+			sysrc -f "/vms/.templates/$VMNAME.conf"	\
+			    network0_type="virtio-net"			\
+				network0_switch="$VMLAN0"			\
+				network0_mac="$VMMAC0"				\
+			;
+		fi
+		if [ ! -z "$VMLAN1" ] ; then
+			sysrc -f "/vms/.templates/$VMNAME.conf"	\
+			    network1_type="virtio-net"			\
+				network1_switch="$VMLAN1"			\
+				network1_mac="$VMMAC1"				\
+			;
+		fi
+		
         vm create -t "$VMNAME" -c "$VMCPUS" -m "$VMRAM" -s "$VMHDD" "$VMNAME"
 		sysrc -f "/vms/$VMNAME/$VMNAME.conf" network0_mac="$VMMAC"
 	    sysrc vm_list+="$VMNAME" 
@@ -54,9 +100,23 @@ VmCreate(){
 		sysrc -f "/vms/$VMNAME/$VMNAME.conf"	\
 			cpu="$VMCPUS"						\
 			memory="$VMRAM"						\
-			network0_switch="$VMLAN"			\
-			network0_mac="$VMMAC"				\
 		;
+
+		if [ ! -z "$VMLAN0" ] ; then
+			sysrc -f "/vms/.templates/$VMNAME.conf"	\
+			    network0_type="virtio-net"			\
+				network0_switch="$VMLAN0"			\
+				network0_mac="$VMMAC0"				\
+			;
+		fi
+		if [ ! -z "$VMLAN1" ] ; then
+			sysrc -f "/vms/.templates/$VMNAME.conf"	\
+			    network1_type="virtio-net"			\
+				network1_switch="$VMLAN1"			\
+				network1_mac="$VMMAC1"				\
+			;
+		fi
+		
 	    sysrc vm_list+="$VMNAME"                # add/update anyway 
         echo "VM configuration updated, to see settings, run: vm configure $VMNAME" >&2
 
@@ -66,10 +126,10 @@ VmCreate(){
 case "$0" in
 	*/myx.common/bin/vm/create) 
 		if [ "$1" = "--help" ] ; then
-			echo "Syntax: myx.common vm/create <name> <cores> <ram> <disk> --lan <mac-address> <iso>" >&2
+			echo "Syntax: myx.common vm/create --linux/--freebsd <name> <cores> <ram> <disk> [--net <lan-name> <mac-address>...] <iso>" >&2
 			echo "Examples:" >&2
-			echo "	myx.common vm/create --linux   bb1-h3  8  8192M 120G lan22 52:54:20:25:20:30 ubuntu-20.04-live-server-amd64.iso" >&2
-			echo "	myx.common vm/create --freebsd dss-h3  8  8192M 120G lan22 52:54:20:25:20:32 FreeBSD-12.1-RELEASE-amd64-disc1.iso" >&2
+			echo "	myx.common vm/create --linux   bb1-h3  8  8192M 120G --net lan22 52:54:20:25:20:30 ubuntu-20.04-live-server-amd64.iso" >&2
+			echo "	myx.common vm/create --freebsd dss-h3  8  8192M 120G --net lan22 52:54:20:25:20:32 FreeBSD-12.1-RELEASE-amd64-disc1.iso" >&2
 			exit 1
 		fi
 		set -e
