@@ -20,7 +20,7 @@ VmCreate(){
     local VMLAN1=""
     local VMMAC1=""
     
-    if [ "$1" -eq "--net" ] ; then
+    if [ "$1" == "--net" ] ; then
     	shift;
     	VMLAN0="$1" ; shift
     	VMMAC0="$1" ; shift
@@ -30,7 +30,7 @@ VmCreate(){
 	    fi
     fi
     
-    if [ "$1" -eq "--net" ] ; then
+    if [ "$1" == "--net" ] ; then
     	shift;
     	VMLAN1="$1" ; shift
     	VMMAC1="$1" ; shift
