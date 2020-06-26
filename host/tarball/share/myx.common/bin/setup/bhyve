@@ -21,8 +21,9 @@ SetupBhyve(){
 	myx.common setup/server
 
 	pkg install -y vm-bhyve grub2-bhyve tmux bhyve-firmware uefi-edk2-bhyve qemu-utils
-	kldload if_bridge if_tap nmdm vmm || true
+	kldload if_bridge if_tap nmdm vmm bridgestp || true
 	ReplaceLine /boot/loader.conf '^if_bridge_load=*' 'if_bridge_load="YES"'
+	ReplaceLine /boot/loader.conf '^bridgestp_load=*' 'bridgestp_load="YES"'
 	ReplaceLine /boot/loader.conf '^if_tap_load=*' 'if_tap_load="YES"'
 	ReplaceLine /boot/loader.conf '^nmdm_load=*' 'nmdm_load="YES"'
 	ReplaceLine /boot/loader.conf '^vmm_load=*' 'vmm_load="YES"'
