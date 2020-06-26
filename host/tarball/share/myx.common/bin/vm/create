@@ -81,6 +81,7 @@ VmCreate(){
 				network0_mac="$VMMAC0"				\
 			;
 		fi
+		
 		if [ ! -z "$VMLAN1" ] ; then
 			sysrc -f "/vms/.templates/$VMNAME.conf"	\
 			    network1_type="virtio-net"			\
@@ -110,6 +111,7 @@ VmCreate(){
 				network0_mac="$VMMAC0"				\
 			;
 		fi
+		
 		if [ ! -z "$VMLAN1" ] ; then
 			sysrc -f "/vms/$VMNAME/$VMNAME.conf"	\
 			    network1_type="virtio-net"			\
