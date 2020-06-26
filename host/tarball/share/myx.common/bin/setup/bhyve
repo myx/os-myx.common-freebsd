@@ -30,7 +30,7 @@ SetupBhyve(){
 	
 	sysrc vm_enable="YES"
 	sysrc vm_dir="zfs:zroot/vms"
-	sysrc vm_list=""
+	sysrc vm_list+=""
 	sysrc vm_delay="5"
 	
 	if [ -z "`zfs list | grep /vms`" ]; then
