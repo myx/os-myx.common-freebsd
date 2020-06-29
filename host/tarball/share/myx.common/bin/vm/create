@@ -61,7 +61,6 @@ VmCreate(){
 				    disk0_name="disk0.img"
 				EOF
 				;;
-				
 			--ubuntu-lvm)
 				sed -e 's/^[ \t]*//' > "/vms/.templates/$VMNAME.conf" <<- EOF;
 				    loader="grub"
