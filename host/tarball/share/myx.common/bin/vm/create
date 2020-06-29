@@ -62,6 +62,16 @@ VmCreate(){
 				EOF
 				;;
 				
+			--ubuntu-lvm)
+				sed -e 's/^[ \t]*//' > "/vms/.templates/$VMNAME.conf" <<- EOF;
+				    loader="grub"
+				    disk0_name="disk0.img"
+				    grub_run_partition="2"
+				    grub_run0="set root=(lvm/ubuntu--vg-ubuntu--lv)"
+				    grub_run1="configfile (hd0,gpt2)/grub/grub.cfg"
+				EOF
+				;;
+				
 			*)
 				echo "Error: vm/create: Unknown vm type: $VMTYPE" >&2
 			    return 1
@@ -130,8 +140,9 @@ case "$0" in
 		if [ "$1" = "--help" ] ; then
 			echo "Syntax: myx.common vm/create --linux/--freebsd <name> <cores> <ram> <disk> [--net <lan-name> <mac-address>...] <iso>" >&2
 			echo "Examples:" >&2
-			echo "	myx.common vm/create --linux   bb1-h3  8  8192M 120G --net lan22 52:54:20:25:20:30 ubuntu-20.04-live-server-amd64.iso" >&2
-			echo "	myx.common vm/create --freebsd dss-h3  8  8192M 120G --net lan22 52:54:20:25:20:32 FreeBSD-12.1-RELEASE-amd64-disc1.iso" >&2
+			echo "	myx.common vm/create --linux      bb1-h1  8  8192M 120G --net lan22 52:54:20:25:20:30 ubuntu-20.04-live-server-amd64.iso" >&2
+			echo "	myx.common vm/create --freebsd    dss-h3  8  8192M 120G --net lan22 52:54:20:25:20:32 FreeBSD-12.1-RELEASE-amd64-disc1.iso" >&2
+			echo "	myx.common vm/create --ubuntu-lvm bb1-h3  8  8192M 120G --net lan22 52:54:20:25:20:30 ubuntu-20.04-live-server-amd64.iso" >&2
 			exit 1
 		fi
 		set -e
