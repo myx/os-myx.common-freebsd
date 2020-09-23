@@ -51,8 +51,17 @@ SetupIpfwOpen(){
 	chmod ug=rwx,o= /usr/local/etc/ipfw.sh /usr/local/etc/ipfw-*.sh
 	
 	kldload ipfw_nat || true
+	
+	##
+	## Should work without breaking current ssh session
+	##
+	
 	# /usr/local/etc/ipfw.sh
-	service ipfw restart || service ipfw onestart
+	
+	
+	# service ipfw restart || service ipfw onestart
+	
+	# echo 'service ipfw restart || service ipfw onestart || true ; sleep 1' | sh -c 'eval "`cat`"'
 }
 
 
