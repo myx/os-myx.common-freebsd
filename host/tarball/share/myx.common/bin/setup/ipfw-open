@@ -21,10 +21,10 @@ SetupIpfwOpen(){
 		mv /usr/local/etc/ipfw.sh /usr/local/etc/ipfw-system.sh
 	fi
 	
-	[ ! -s /usr/local/etc/ipfw-system.sh ] && sed -e 's/^[ \t]*//' > /usr/local/etc/ipfw-system.sh <<- 'EOF'
+	[ -s /usr/local/etc/ipfw-system.sh ] || sed -e 's/^[ \t]*//' > /usr/local/etc/ipfw-system.sh <<- 'EOF'
 		#!/bin/sh
 	EOF
-	[ ! -s /usr/local/etc/ipfw-custom.sh ] && sed -e 's/^[ \t]*//' > /usr/local/etc/ipfw-custom.sh <<- 'EOF'
+	[ -s /usr/local/etc/ipfw-custom.sh ] || sed -e 's/^[ \t]*//' > /usr/local/etc/ipfw-custom.sh <<- 'EOF'
 		#!/bin/sh
 	EOF
 	
