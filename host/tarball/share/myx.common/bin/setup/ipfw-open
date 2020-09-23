@@ -51,7 +51,8 @@ SetupIpfwOpen(){
 	chmod ug=rwx,o= /usr/local/etc/ipfw.sh /usr/local/etc/ipfw-*.sh
 	
 	kldload ipfw_nat || true
-	/usr/local/etc/ipfw.sh
+	# /usr/local/etc/ipfw.sh
+	service ipfw restart || service ipfw onestart
 }
 
 
