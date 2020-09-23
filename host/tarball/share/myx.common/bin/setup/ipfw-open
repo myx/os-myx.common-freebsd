@@ -1,0 +1,67 @@
+#!/bin/sh
+
+set -e
+
+type UserRequireRoot >/dev/null 2>&1 || \
+	. "/usr/local/share/myx.common/bin/user/requireRoot"
+
+type ReplaceLine >/dev/null 2>&1 || \
+	. "/usr/local/share/myx.common/bin/lib/replaceLine"
+
+SetupIpfwOpen(){
+
+	UserRequireRoot "setup/ipfw-open"
+
+	sysrc firewall_enable=YES
+	sysrc firewall_nat_enable=YES
+	sysrc firewall_script=/usr/local/etc/ipfw.sh
+	sysrc firewall_type=OPEN
+	
+	if [ ! -f /usr/local/etc/ipfw-system.sh ] && [ -s /usr/local/etc/ipfw.sh ] ; then
+		mv /usr/local/etc/ipfw.sh /usr/local/etc/ipfw-system.sh
+	fi
+	
+	[ ! -s /usr/local/etc/ipfw-system.sh ] && sed -e 's/^[ \t]*//' > /usr/local/etc/ipfw-system.sh <<- 'EOF'
+		#!/bin/sh
+	EOF
+	[ ! -s /usr/local/etc/ipfw-custom.sh ] && sed -e 's/^[ \t]*//' > /usr/local/etc/ipfw-custom.sh <<- 'EOF'
+		#!/bin/sh
+	EOF
+	
+	if [ ! -s /usr/local/etc/ipfw.sh ] ; then
+		sed -e 's/^[ \t]*//' > /usr/local/etc/ipfw.sh <<- 'EOF'
+			#!/bin/sh
+			
+			/sbin/ipfw -f flush
+			/sbin/ipfw -f pipe flush
+			/sbin/ipfw -f queue flush
+			/sbin/ipfw -f table all flush
+			
+			/sbin/ipfw add 900 allow ip from any to any
+			
+			[ -s /usr/local/etc/ipfw-system.sh ] && . /usr/local/etc/ipfw-system.sh || true ## myx-system-ipfw
+			[ -s /usr/local/etc/ipfw-custom.sh ] && . /usr/local/etc/ipfw-custom.sh || true ## myx-ipfw-custom
+		EOF
+	fi 
+	
+	ReplaceLine /usr/local/etc/ipfw.sh ' || true ## myx-system-ipfw$' '[ -s /usr/local/etc/ipfw-system.sh ] && . /usr/local/etc/ipfw-system.sh || true ## myx-system-ipfw'
+	ReplaceLine /usr/local/etc/ipfw.sh ' || true ## myx-ipfw-custom$' '[ -s /usr/local/etc/ipfw-custom.sh ] && . /usr/local/etc/ipfw-custom.sh || true ## myx-ipfw-custom'
+	
+	chown root:wheel /usr/local/etc/ipfw.sh /usr/local/etc/ipfw-*.sh
+	chmod ug=rwx,o= /usr/local/etc/ipfw.sh /usr/local/etc/ipfw-*.sh
+	
+	kldload ipfw_nat || true
+	/usr/local/etc/ipfw.sh
+}
+
+
+case "$0" in
+	*/myx.common/bin/setup/ipfw-open) 
+		if [ "$1" = "--help" ] ; then
+			echo "Syntax: myx.common setup/ipfw-open" >&2
+			exit 1
+		fi
+		set -e
+		SetupIpfwOpen "$@"
+	;;
+esac
