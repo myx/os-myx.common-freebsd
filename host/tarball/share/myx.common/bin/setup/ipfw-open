@@ -8,14 +8,19 @@ type UserRequireRoot >/dev/null 2>&1 || \
 type ReplaceLine >/dev/null 2>&1 || \
 	. "/usr/local/share/myx.common/bin/lib/replaceLine"
 
+type SetLoaderConf >/dev/null 2>&1 || \
+	. "/usr/local/share/myx.common/bin/lib/setLoaderConf"
+
 SetupIpfwOpen(){
 
 	UserRequireRoot "setup/ipfw-open"
 
-	sysrc firewall_enable=YES
-	sysrc firewall_nat_enable=YES
-	sysrc firewall_script=/usr/local/etc/ipfw.sh
-	sysrc firewall_type=OPEN
+	sysrc firewall_enable="YES"
+	sysrc firewall_nat_enable="YES"
+	sysrc firewall_script="/usr/local/etc/ipfw.sh"
+	sysrc firewall_type="open"
+	
+	SetLoaderConf net.inet.ip.fw.default_to_accept '"1"'
 	
 	if [ ! -f /usr/local/etc/ipfw-system.sh ] && [ -s /usr/local/etc/ipfw.sh ] ; then
 		mv /usr/local/etc/ipfw.sh /usr/local/etc/ipfw-system.sh

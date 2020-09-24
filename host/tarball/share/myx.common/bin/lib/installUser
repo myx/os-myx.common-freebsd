@@ -7,7 +7,7 @@ type UserRequireRoot >/dev/null 2>&1 || \
 	. "/usr/local/share/myx.common/bin/user/requireRoot"
 
 InstallUser(){
-	UserRequireRoot "InstallUser"
+	UserRequireRoot "lib/installUser"
 
 	local NAME="$1" TITLE="$2" 
 	local UGID="$3" UHOME="${4:-/home/$NAME/}"
