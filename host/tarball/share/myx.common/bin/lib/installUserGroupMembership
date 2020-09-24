@@ -6,7 +6,7 @@ type UserRequireRoot >/dev/null 2>&1 || \
 	. "/usr/local/share/myx.common/bin/user/requireRoot"
 
 InstallUserGroupMembership(){
-	UserRequireRoot "InstallUserGroupMembership"
+	UserRequireRoot "lib/installUserGroupMembership"
 
 	local NAME="$1"; shift;
 	local GROUPS="$@"

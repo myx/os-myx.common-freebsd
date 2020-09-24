@@ -13,7 +13,7 @@ type OsGetUtilityPackage >/dev/null 2>&1 || \
 InstallEnsurePackage(){
 	set -e
 	
-	UserRequireRoot "InstallEnsurePackage"
+	UserRequireRoot "lib/installEnsurePackage"
 
 	local NAME="$1"
 	[ -z "$NAME" ] && echo "The utility name is required!" && return 1
