@@ -20,25 +20,27 @@ TuneZfsQuarterCache(){
 			
 			. /etc/rc.subr
 			
-			name="myx-common-zfs-quarter-cache"
-			rcvar="myx_common_zfsQuarterCache_enable"
+			name="mczfsqc"
+			#rcvar="mczfsqc_enable"
 			
 			start_cmd="/usr/local/bin/myx.common tune/zfsQuarterCache"
 			stop_cmd=":"
 			
 			load_rc_config $name
 			
-			myx_common_zfsQuarterCache_enable="${myx_common_zfsQuarterCache_enable:-YES}"
+			mczfsqc_enable="${mczfsqc_enable:-YES}"
 			
 			run_rc_command "$1"
 		EOF
 		chown root:wheel /usr/local/etc/rc.d/myx-common-zfs-quarter-cache
 		chmod +x /usr/local/etc/rc.d/myx-common-zfs-quarter-cache
+		sysrc mczfsqc_enable="YES"
 		echo "MC-ZFS-QC: rc script installed: $( ls -lstar /usr/local/etc/rc.d/myx-common-zfs-quarter-cache )" >&2
 	fi
 	
 	if [ "--remove" = "$1" ] ; then
 		rm /usr/local/etc/rc.d/myx-common-zfs-quarter-cache
+		sysrc -X mczfsqc_enable || true
 		echo "MC-ZFS-QC: rc script removed: /usr/local/etc/rc.d/myx-common-zfs-quarter-cache" >&2
 		return 0
 	fi
