@@ -26,7 +26,7 @@ SetLoaderConf(){
 	
 	if sysctl -n "$PARAM" > /dev/null 2>&1 ; then
 	
-		local CURRENT="$(sysctl -n "$PARAM")"
+		local CURRENT="$(sysrc -f /boot/loader.conf -nq "$PARAM" || true)"
 	
 		if [ "$GROW" = "TRUE" ] ; then
 			if [ "$VALUE" -gt "$CURRENT" ] ; then 
