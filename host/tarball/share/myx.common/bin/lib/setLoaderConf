@@ -25,7 +25,7 @@ SetLoaderConf(){
 	local VALUE="$2"
 	
 	local CURRENT="$(sysrc -f /boot/loader.conf -nq "$PARAM" || true)"
-
+	
 	if [ "$GROW" = "TRUE" ] ; then
 		if [ "$VALUE" -gt "$CURRENT" ] ; then 
 			ReplaceLine /boot/loader.conf "^$PARAM=*" "$PARAM=$VALUE" || true
@@ -38,7 +38,7 @@ SetLoaderConf(){
 		fi
 		return 0
 	fi
-
+	
 	if [ "$VALUE" != "$CURRENT" ] ; then 
 		ReplaceLine /boot/loader.conf "^$PARAM=*" "$PARAM=$VALUE" || true
 	fi
