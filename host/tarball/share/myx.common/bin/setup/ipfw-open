@@ -20,7 +20,7 @@ SetupIpfwOpen(){
 	sysrc firewall_script="/usr/local/etc/ipfw.sh"
 	sysrc firewall_type="open"
 	
-	SetLoaderConf net.inet.ip.fw.default_to_accept '"1"'
+	SetLoaderConf net.inet.ip.fw.default_to_accept 1
 	
 	if [ ! -f /usr/local/etc/ipfw-system.sh ] && [ -s /usr/local/etc/ipfw.sh ] ; then
 		mv /usr/local/etc/ipfw.sh /usr/local/etc/ipfw-system.sh
