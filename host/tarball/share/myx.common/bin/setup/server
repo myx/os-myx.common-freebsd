@@ -64,6 +64,9 @@ SetupServer(){
 	
 	test "$1" != "--postfix-mta" || myx.common os/installPostfixMTA
 	
+	ReplaceLine "/etc/ssh/sshd_config" "^PermitEmptyPasswords *" "PermitEmptyPasswords no"
+	ReplaceLine "/etc/ssh/sshd_config" "^PasswordAuthentication *" "PasswordAuthentication no"
+
 	ReplaceLine "/etc/ssh/sshd_config" "^PermitRootLogin *" "PermitRootLogin prohibit-password"
 	##ReplaceLine "/etc/ssh/sshd_config" "^PermitRootLogin *" "PermitRootLogin forced-commands-only"
 	##ReplaceLine "/etc/ssh/sshd_config" "^PermitRootLogin *" "PermitRootLogin no"
