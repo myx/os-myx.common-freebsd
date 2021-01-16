@@ -14,7 +14,7 @@ type ReplaceLine >/dev/null 2>&1 || \
 SetupBhyve(){
 
 	if [ "`zfs list| grep -ic -e /`" -eq 0 ]; then
-		echo "Error: setup/bhyve: ZFS file-system required!" >&2
+		echo "ERROR: setup/bhyve: ZFS file-system required!" >&2
 	    return 1
 	fi
 	

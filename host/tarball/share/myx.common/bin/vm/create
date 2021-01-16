@@ -10,7 +10,7 @@ VmCreate(){
     local VMHDD="$1"  ; shift
     	
     if [ -z "$VMTYPE" -o -z "$VMNAME" -o -z "$VMCPUS" -o -z "$VMRAM" -o -z "$VMHDD" ] ; then
-		echo "Syntax error: vm/create: check arguments." >&2
+		echo "ERROR: Syntax error: vm/create: check arguments." >&2
 		return 1
     fi
     
@@ -34,14 +34,14 @@ VmCreate(){
     	VMLAN1="$1" ; shift
     	VMMAC1="$1" ; shift
 	    if [ -z "$VMLAN1" -o -z "$VMMAC1" ] ; then
-			echo "Syntax error: vm/create: network #2: invalid arguments" >&2
+			echo "ERROR: Syntax error: vm/create: network #2: invalid arguments" >&2
 			return 1
 	    fi
     fi
     
     local VMISO="$1" ; shift
     if [ -z "$VMISO" ] ; then
-		echo "Syntax error: vm/create: iso image: invalid arguments" >&2
+		echo "ERROR: Syntax error: vm/create: iso image: invalid arguments" >&2
 		return 1
     fi
     	
@@ -72,7 +72,7 @@ VmCreate(){
 				;;
 				
 			*)
-				echo "Error: vm/create: Unknown vm type: $VMTYPE" >&2
+				echo "ERROR: vm/create: Unknown vm type: $VMTYPE" >&2
 			    return 1
 			    ;;
 				

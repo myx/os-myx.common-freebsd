@@ -12,8 +12,8 @@ InstallUser(){
 	local NAME="$1" TITLE="$2" 
 	local UGID="$3" UHOME="${4:-/home/$NAME/}"
 	
-	[ -z "$NAME" ] && echo "InstallUser: username is required!" && exit 1
-	[ -z "$TITLE" ] && echo "InstallUser: usertitle is taken from name ($NAME)!" && TITLE="$NAME"
+	[ -z "$NAME" ] && echo "ERROR: InstallUser: username is required!" >&2 && exit 1
+	[ -z "$TITLE" ] && echo "WARNING: InstallUser: usertitle is taken from name ($NAME)!" >&2 && TITLE="$NAME"
 
 	pwd_mkdb /etc/master.passwd
 
