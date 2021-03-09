@@ -128,6 +128,14 @@ VmCreate(){
 			;
 		fi
 		
+		if [ ! -z "$VMHDD" ] ; then
+			if [ -f /vms/$VMNAME/disk0.img ] ; then
+				truncate -c -s "$VMHDD" /vms/$VMNAME/disk0.img 
+			else
+		        echo "Cannot check/modifiy disk image size, skipped... ($VMNAME)" >&2
+			fi
+		fi
+
 	    sysrc vm_list+="$VMNAME"                # add/update anyway 
         echo "VM configuration updated, to see settings, run: vm configure $VMNAME" >&2
 
