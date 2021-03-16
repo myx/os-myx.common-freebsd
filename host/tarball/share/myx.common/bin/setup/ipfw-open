@@ -45,9 +45,9 @@ SetupIpfwOpen(){
 			${fwcmd} table all flush
 
 			# /etc/rc.firewall: setup_loopback()
-			${fwcmd} add 100 set 2 pass ip from any to any via lo0 // local internal
-			${fwcmd} add 200 set 2 deny all from any to 127.0.0.0/8
-    			${fwcmd} add 300 set 2 deny ip from 127.0.0.0/8 to any
+			${fwcmd} add 100 pass ip from any to any via lo0 // local internal
+			${fwcmd} add 200 deny all from any to 127.0.0.0/8
+    			${fwcmd} add 300 deny ip from 127.0.0.0/8 to any
 			# /etc/rc.firewall: setup_ipv6_mandatory()
 			${fwcmd} add pass ipv6-icmp from :: to ff02::/16
 			${fwcmd} add pass ipv6-icmp from fe80::/10 to fe80::/10
