@@ -22,7 +22,7 @@ SetupIpfwOpen(){
 	
 	SetLoaderConf net.inet.ip.fw.default_to_accept 1
 	
-	if [ ! -f /usr/local/etc/ipfw-system.sh ] && [ -s /usr/local/etc/ipfw.sh ] ; then
+	if [ ! -f /usr/local/etc/ipfw-system.sh ] && [ ! -f /usr/local/etc/ipfw-custom.sh ] && [ -s /usr/local/etc/ipfw.sh ] ; then
 		mv /usr/local/etc/ipfw.sh /usr/local/etc/ipfw-system.sh
 	fi
 	
