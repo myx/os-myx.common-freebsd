@@ -13,15 +13,19 @@ OsNeedsReboot(){
 			;;
 			--silent)
 				doPrint=""
+				shift
 			;;
 			--print)
 				doPrint="TRUE"
+				shift
 			;;
 			--reboot)
 				doReboot="TRUE"
+				shift
 			;;
 			--no-reboot)
 				doReboot=""
+				shift
 			;;
 			*)
 				echo "OsNeedsReboot: Invalid arguments: $@" >&2
