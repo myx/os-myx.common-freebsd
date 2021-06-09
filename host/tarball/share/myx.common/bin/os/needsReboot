@@ -2,7 +2,7 @@
 
 ##### !!! THIS SCRIPT MUST BE OVERRIDEN IN OS-DEPENDENT IMPLEMENTATION !!! #####
 
-IsRebootNeeded(){
+OsNeedsReboot(){
 	local doReboot=""
 	local doPrint="TRUE"
 
@@ -24,30 +24,30 @@ IsRebootNeeded(){
 				doReboot=""
 			;;
 			*)
-				echo "IsRebootNeeded: Invalid arguments: $@" >&2
+				echo "OsNeedsReboot: Invalid arguments: $@" >&2
 				exit 2
 			;;
 		esac
 	done
 
 	if [ $(uname -r) = $(freebsd-version) ] ; then
-		[ -z "$doPrint" ] || echo 'Latest'
+		[ -z "$doPrint" ] || echo 'Latest' >&2
 		exit 1
 	fi
-	
-	[ -z "$doPrint" ] || echo 'Reboot'
+
+	[ -z "$doPrint" ] || echo 'Reboot' >&2
 	[ -z "$doReboot" ] || reboot
 	exit 0
 }
 
 
 case "$0" in
-	*/myx.common/bin/os/isRebootNeeded) 
+	*/myx.common/bin/os/needsReboot) 
 		if [ "$1" = "--help" ] ; then
-			echo "Syntax: myx.common os/isRebootNeeded [--silent|--reboot]" >&2
+			echo "Syntax: myx.common os/needsReboot [--silent|--reboot]" >&2
 			exit 1
 		fi
 		set -e
-		IsRebootNeeded "$@"
+		OsNeedsReboot "$@"
 	;;
 esac
