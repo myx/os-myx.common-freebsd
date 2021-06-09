@@ -1,0 +1,53 @@
+#!/bin/sh
+
+##### !!! THIS SCRIPT MUST BE OVERRIDEN IN OS-DEPENDENT IMPLEMENTATION !!! #####
+
+IsRebootNeeded(){
+	local doReboot=""
+	local doPrint="TRUE"
+
+	while true; do
+		case "$1" in
+			'')
+				break
+			;;
+			--silent)
+				doPrint=""
+			;;
+			--print)
+				doPrint="TRUE"
+			;;
+			--reboot)
+				doReboot="TRUE"
+			;;
+			--no-reboot)
+				doReboot=""
+			;;
+			*)
+				echo "IsRebootNeeded: Invalid arguments: $@" >&2
+				exit 2
+			;;
+		esac
+	done
+
+	if [ $(uname -r) = $(freebsd-version) ] ; then
+		[ -z "$doPrint" ] || echo 'Latest'
+		exit 1
+	fi
+	
+	[ -z "$doPrint" ] || echo 'Reboot'
+	[ -z "$doReboot" ] || reboot
+	exit 0
+}
+
+
+case "$0" in
+	*/myx.common/bin/os/isRebootNeeded) 
+		if [ "$1" = "--help" ] ; then
+			echo "Syntax: myx.common os/isRebootNeeded [--silent|--reboot]" >&2
+			exit 1
+		fi
+		set -e
+		IsRebootNeeded "$@"
+	;;
+esac
