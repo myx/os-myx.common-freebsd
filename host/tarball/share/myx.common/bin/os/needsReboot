@@ -34,7 +34,7 @@ OsNeedsReboot(){
 		esac
 	done
 
-	if [ $(uname -r) = $(freebsd-version) ] ; then
+	if [ $(uname -r) = $(freebsd-version -k) ] ; then
 		[ -z "$doPrint" ] || echo 'Latest' >&2
 		exit 1
 	fi
