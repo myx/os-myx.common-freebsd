@@ -13,15 +13,19 @@ type SetSysctlConf >/dev/null 2>&1 || \
 TuneNetworkSpeed(){
 	set -e
 	
+	SetSysctlConf kern.maxfiles --grow 999999 || true
+
 	SetSysctlConf kern.ipc.soacceptqueue --grow 1024 || true
 	SetSysctlConf kern.ipc.somaxconn --grow 1024 || true
-	SetSysctlConf net.inet.tcp.msl --shrink 10000 || true
-	SetSysctlConf kern.maxfiles --grow 999999 || true
 	SetSysctlConf kern.ipc.maxsockets --grow 888888 || true
-	
-	SetSysctlConf net.inet.tcp.nolocaltimewait 1 || true
+
 	SetSysctlConf net.inet.tcp.maxtcptw --shrink 8192 || true
+	SetSysctlConf net.inet.tcp.maxtcptw --shrink 4096 || true
+
+	SetSysctlConf net.inet.tcp.msl --shrink 10000 || true
 	SetSysctlConf net.inet.tcp.msl --shrink 5000 || true
+
+	SetSysctlConf net.inet.tcp.nolocaltimewait 1 || true
 	
 	SetSysctlConf net.inet.tcp.icmp_may_rst 0 || true
 	
@@ -41,6 +45,8 @@ TuneNetworkSpeed(){
 	SetSysctlConf net.inet.udp.blackhole 1 || true
 	SetSysctlConf net.inet.ip.redirect 0 || true
 	SetSysctlConf net.inet6.ip6.redirect 0 || true
+
+	SetSysctlConf net.inet.tcp.syncache.rexmtlimit 1 || true
 }
 
 
