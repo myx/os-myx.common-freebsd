@@ -29,8 +29,8 @@ TuneNetworkSpeed(){
 	
 	SetSysctlConf net.inet.tcp.icmp_may_rst 0 || true
 	
-	SetSysctlConf net.inet.tcp.keepidle --shrink 300000 || true
-	SetSysctlConf net.inet.tcp.keepidle --shrink 100000 || true
+	SetSysctlConf net.inet.tcp.keepidle --shrink 150000 || true
+	SetSysctlConf net.inet.tcp.keepidle --shrink 35000 || true
 
 	SetSysctlConf net.inet.tcp.keepinit --shrink 10000 || true
 	SetSysctlConf net.inet.tcp.keepinit --shrink 5000 || true
@@ -52,7 +52,24 @@ TuneNetworkSpeed(){
 	SetSysctlConf net.inet.ip.redirect 0 || true
 	SetSysctlConf net.inet6.ip6.redirect 0 || true
 
-	SetSysctlConf net.inet.tcp.syncache.rexmtlimit 1 || true
+	SetSysctlConf net.inet.icmp.drop_redirect 1 || true
+
+	SetSysctlConf net.inet.tcp.syncache.rexmtlimit 0 || true
+	SetSysctlConf net.inet.tcp.always_keepalive 0 || true
+	SetSysctlConf net.inet.tcp.drop_synfin 1 || true
+
+	SetSysctlConf net.inet.ip.rtexpire 10 || true
+	SetSysctlConf net.inet.ip.rtminexpire 10 || true
+
+	myx.common lib/setLoaderConf cc_htcp_load '"YES"'
+	myx.common lib/setLoaderConf cc_cubic_load '"YES"'
+
+	# kldload -n cc_htcp > /dev/null 2>&1 || true
+	# myx.common lib/setSysctlConf net.inet.tcp.cc.algorithm htcp
+
+	# kldload -n cc_cubic > /dev/null 2>&1 || true
+	# myx.common lib/setSysctlConf net.inet.tcp.cc.algorithm cubic
+
 }
 
 
