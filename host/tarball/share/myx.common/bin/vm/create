@@ -130,9 +130,14 @@ VmCreate(){
 		
 		if [ ! -z "$VMHDD" ] ; then
 			if [ -f /vms/$VMNAME/disk0.img ] ; then
-				truncate -c -s "$VMHDD" /vms/$VMNAME/disk0.img 
+		        echo "Disk type ($VMNAME): file image: /vms/$VMNAME/disk0.img" >&2
+				truncate -c -s "$VMHDD" "/vms/$VMNAME/disk0.img"
+			elif [ ! -z "$( zfs list | grep -e "^zroot/vms/$VMNAME/disk0\s" )" ] ; then
+		        echo "Disk type ($VMNAME): zfs volume: zroot/vms/$VMNAME/disk0" >&2
+				zfs set "volsize=$VMHDD" "zroot/vms/$VMNAME/disk0"
 			else
-		        echo "Cannot check/modifiy disk image size, skipped... ($VMNAME)" >&2
+		        echo "Disk type ($VMNAME): not supported / cannot detect" >&2
+		        echo "WARNING: Cannot check/modifiy disk image size, skipped... ($VMNAME)" >&2
 			fi
 		fi
 
