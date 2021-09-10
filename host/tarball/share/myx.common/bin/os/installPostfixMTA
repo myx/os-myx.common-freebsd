@@ -12,7 +12,7 @@ OsInstallPostfixMTA(){
 	BATCH="YES" POSTFIX_DEFAULT_MTA="YES" pkg install -y postfix
 	
 	sysrc -f /etc/rc.conf \
-		sendmail_enable=NO \
+		sendmail_enable=NONE \
 		sendmail_submit_enable=NO \
 		sendmail_msp_queue_enable=NO \
 		postfix_enable=YES
