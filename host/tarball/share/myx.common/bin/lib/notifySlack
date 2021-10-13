@@ -97,7 +97,7 @@ case "$0" in
 		if [ -z "$1" ] || [ "$1" = "--help" ] ; then
 			echo "Syntax: myx.common lib/notifySlack --text <text> [--bearer <token-bearer>] [--channel <channel>] [--user <user-name>] [--emoji <emoji>]" >&2
 			echo "Note:" >&2
-			echo "	When ommited, bearer, channel and user are taken from SLACK_TOKN, SLACK_TOPIC and HOST env variables respectively." >&2
+			echo "	When ommited, bearer, channel and user are taken from SLACK_TOKEN, SLACK_TOPIC and HOST env variables respectively." >&2
 			exit 1
 		fi
 		NotifySlack "$@"
