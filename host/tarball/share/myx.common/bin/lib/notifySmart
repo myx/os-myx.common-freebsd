@@ -1,0 +1,78 @@
+#!/bin/sh
+
+set -e
+
+NotifySmart(){
+	local eventType="$1" ; shift
+
+	local eventText="" eventUser="" eventEmoji=""
+
+	while [ "$1" != "" ] ; do
+		case "$1" in
+			--text)
+				if [ -z "$2" ] ; then
+					echo "NotifySmart: argument expected after $1 option" >&2
+					return 1
+				fi
+				local eventText="$2" ; shift ; shift
+			;;
+			--user)
+				if [ -z "$2" ] ; then
+					echo "NotifySmart: argument expected after $1 option" >&2
+					return 1
+				fi
+				local eventUser="$2" ; shift ; shift
+			;;
+			--emoji)
+				if [ -z "$2" ] ; then
+					echo "NotifySmart: argument expected after $1 option" >&2
+					return 1
+				fi
+				local eventEmoji="$2" ; shift ; shift
+			;;
+			*)
+				echo "NotifySmart: invalid option: $1" >&2
+				return 1
+			;;
+		esac
+	done
+
+	local SLACK_TOPIC="$SLACK_TOPIC"
+
+	case "$eventType" in
+		alert)
+			local SLACK_TOPIC="${SLACK_ALERT:-$SLACK_TOPIC}"
+		;;
+		audit)
+			local SLACK_TOPIC="${SLACK_AUDIT:-$SLACK_TOPIC}"
+		;;
+		track)
+			local SLACK_TOPIC="${SLACK_TRACK:-$SLACK_TOPIC}"
+		;;
+		debug)
+			local SLACK_TOPIC="${SLACK_DEBUG:-$SLACK_TOPIC}"
+		;;
+		*)
+			echo "NotifySmart: invalid event type: $eventType" >&2
+			return 1
+		;;
+	esac
+
+	logger -s -t "$eventType" "@${eventUser:-$(whoami)}: $eventText"
+
+	if [ ! -z "$SLACK_TOKEN" ] ; then
+		#
+		myx.common lib/notifySlack --bearer "$SLACK_TOKEN" --channel "$SLACK_TOPIC" --emoji "$eventEmoji" --user "$eventUser" --text "$eventText"
+	fi
+}
+
+
+case "$0" in
+	*/myx.common/bin/lib/notifySmart) 
+		if [ -z "$1" ] || [ "$1" = "--help" ] ; then
+			echo "Syntax: myx.common lib/notifySmart alert|audit|track|debug [--user <user>] [--emoji <emoji>] --text <message>" >&2
+			exit 1
+		fi
+		NotifySmart "$@"
+	;;
+esac
