@@ -1,7 +1,7 @@
 Name: os-myx.common-freebsd
 Requires: os-myx.common
 Provides: \
-	os.any os.unix os.freebsd myx.common/os-myx.common-freebsd \
+	os.any os.unix os.freebsd os-myx.common-freebsd myx/os-myx.common-freebsd myx.common/os-myx.common-freebsd \
 	freebsd-installer.sh:build.freebsd-installer \
 	source-process:project-source.tgz \
 	deploy-export:project-source.tgz:github.com/myx/os-myx.common-freebsd/archive/master.tar.gz \
