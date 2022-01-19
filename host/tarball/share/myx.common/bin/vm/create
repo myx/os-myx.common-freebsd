@@ -173,6 +173,22 @@ VmCreate(){
 			;
 		fi
 		
+		if [ ! -z "$VMLAN2" ] ; then
+			sysrc -f "/vms/$VMNAME/$VMNAME.conf"	\
+			    network2_type="virtio-net"			\
+				network2_switch="$VMLAN2"			\
+				network2_mac="$VMMAC2"				\
+			;
+		fi
+		
+		if [ ! -z "$VMLAN3" ] ; then
+			sysrc -f "/vms/$VMNAME/$VMNAME.conf"	\
+			    network3_type="virtio-net"			\
+				network3_switch="$VMLAN3"			\
+				network3_mac="$VMMAC3"				\
+			;
+		fi
+		
 		if [ ! -z "$VMHDD" ] ; then
 			if [ -f /vms/$VMNAME/disk0.img ] ; then
 		        echo "Disk type: file image: /vms/$VMNAME/disk0.img" >&2
