@@ -18,13 +18,17 @@ VmCreate(){
     local VMMAC0=""
     local VMLAN1=""
     local VMMAC1=""
+    local VMLAN2=""
+    local VMMAC2=""
+    local VMLAN3=""
+    local VMMAC3=""
     
     if [ "$1" == "--net" ] ; then
     	shift;
     	VMLAN0="$1" ; shift
     	VMMAC0="$1" ; shift
 	    if [ -z "$VMLAN0" -o -z "$VMMAC0" ] ; then
-			echo "Syntax error: vm/create: network #1: invalid arguments" >&2
+			echo "ERROR: Syntax error: vm/create: network #1: invalid arguments" >&2
 			return 1
 	    fi
     fi
@@ -39,6 +43,31 @@ VmCreate(){
 	    fi
     fi
     
+    if [ "$1" == "--net" ] ; then
+    	shift;
+    	VMLAN2="$1" ; shift
+    	VMMAC2="$1" ; shift
+	    if [ -z "$VMLAN2" -o -z "$VMMAC2" ] ; then
+			echo "ERROR: Syntax error: vm/create: network #3: invalid arguments" >&2
+			return 1
+	    fi
+    fi
+    
+    if [ "$1" == "--net" ] ; then
+    	shift;
+    	VMLAN3="$1" ; shift
+    	VMMAC3="$1" ; shift
+	    if [ -z "$VMLAN3" -o -z "$VMMAC3" ] ; then
+			echo "ERROR: Syntax error: vm/create: network #4: invalid arguments" >&2
+			return 1
+	    fi
+    fi
+
+    if [ "$1" == "--net" ] ; then
+		echo "ERROR: Only up to 4 network interfaces supported" >&2
+		return 1
+	fi
+
     local VMISO="$1" ; shift
     if [ -z "$VMISO" ] ; then
 		echo "ERROR: Syntax error: vm/create: iso image: invalid arguments" >&2
@@ -95,6 +124,22 @@ VmCreate(){
 			    network1_type="virtio-net"			\
 				network1_switch="$VMLAN1"			\
 				network1_mac="$VMMAC1"				\
+			;
+		fi
+		
+		if [ ! -z "$VMLAN2" ] ; then
+			sysrc -f "/vms/.templates/$VMNAME.conf"	\
+			    network2_type="virtio-net"			\
+				network2_switch="$VMLAN2"			\
+				network2_mac="$VMMAC2"				\
+			;
+		fi
+		
+		if [ ! -z "$VMLAN3" ] ; then
+			sysrc -f "/vms/.templates/$VMNAME.conf"	\
+			    network3_type="virtio-net"			\
+				network3_switch="$VMLAN3"			\
+				network3_mac="$VMMAC3"				\
 			;
 		fi
 		
