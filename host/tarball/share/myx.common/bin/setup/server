@@ -72,6 +72,8 @@ SetupServer(){
 	ReplaceLine "/etc/ssh/sshd_config" "^PermitRootLogin *" "PermitRootLogin prohibit-password"
 	##ReplaceLine "/etc/ssh/sshd_config" "^PermitRootLogin *" "PermitRootLogin forced-commands-only"
 	##ReplaceLine "/etc/ssh/sshd_config" "^PermitRootLogin *" "PermitRootLogin no"
+
+	ReplaceLine "/etc/ssh/sshd_config" "^UseDNS *" "UseDNS no"
 	
 	service sshd reload
 }
