@@ -12,6 +12,8 @@
 echo "myx.common FreeBSD Installer started..." >&2
 test `id -u` != 0 && echo 'ERROR: Must be root!' >&2 && exit 1
 
+pkg bootstrap -y ; [ ! -z "$( pkg info | grep ca_root )" ] || pkg install -y ca_root_nss
+
 fetch https://github.com/myx/os-myx.common/archive/master.tar.gz -o - | \
 		tar zxvf - -C "/usr/local/" --include "*/host/tarball/*" --strip-components 3
 		
