@@ -14,7 +14,7 @@ VmCreate(){
 		return 1
     fi
     
-	local VMHDD="`echo "$VMHDD" | sed 's/[ ]*//g;s/[bB]$//;s/^.*[^0-9gkmt].*$//;s/t$/Xg/;s/g$/Xm/;s/m$/Xk/;s/k$/X/;s/X/*1024/g' | bc`"
+	local VMHDD="`echo "$VMHDD" | sed 's/[ ]*//g;s/[bB]$//;s/^.*[^0-9gkmt].*$//i;s/t$/Xg/i;s/g$/Xm/i;s/m$/Xk/i;s/k$/X/i;s/X/*1024/g' | bc`"
 
 	if [ -z "$VMHDD" ] ; then
 		echo "ERROR: Syntax error: vm/create: check arguments: disk size is invalid!" >&2
