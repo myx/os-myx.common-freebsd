@@ -207,14 +207,14 @@ VmCreate(){
 			if [ -f "/vms/$VMNAME/disk0.img" ] ; then
 		        echo "Disk type: file image: /vms/$VMNAME/disk0.img" >&2
 				if [ -z "$SHRINK" -a "$VMHDD" -lt "$(sh -c '(eval `stat -s "/vms/$VMNAME/disk0.img"` ; echo $st_size)')" ] ; then
-					echo "WARNING: Shrink is not allowed, use --shrink-disk option!" >&2
+					echo "WARNING: Image shrink is not allowed, use --shrink-disk option, skipped... ($VMNAME)" >&2
 				else
 					truncate -c -s "$VMHDD" "/vms/$VMNAME/disk0.img"
 				fi
 			elif [ ! -z "$( zfs list | grep -e "^zroot/vms/$VMNAME/disk0\s" )" ] ; then
 		        echo "Disk type: zfs volume: zroot/vms/$VMNAME/disk0" >&2
 				if [ -z "$SHRINK" -a "$VMHDD" -lt "$(zfs get -H -p -o value volsize zroot/vms/$VMNAME/disk0)" ] ; then
-					echo "WARNING: Shrink is not allowed, use --shrink-disk option!" >&2
+					echo "WARNING: ZFS shrink is not allowed, use --shrink-disk option, skipped... ($VMNAME)" >&2
 				else
 					zfs set "volsize=$VMHDD" "zroot/vms/$VMNAME/disk0"
 				fi
@@ -237,7 +237,7 @@ case "$0" in
 			echo "  myx.common vm/create --linux/--freebsd/--ubuntu-lvm <name> <cores> <ram> <disk> [--shrink-disk] [--net <lan-name> <mac-address>...] <iso>" >&2
 			echo "Examples:" >&2
 			echo "	myx.common vm/create --linux      bb1-h1  8  8192M 120G --net lan22 52:54:20:25:20:28 ubuntu-20.04.3-live-server-amd64.iso" >&2
-			echo "	myx.common vm/create --freebsd    dss-h3  8  8192M 120G --net lan22 52:54:20:22:20:32 FreeBSD-13.0-RELEASE-amd64-disc1.iso" >&2
+			echo "	myx.common vm/create --freebsd    dss-h3  8  8192M 120G --net lan22 52:54:20:22:20:32 FreeBSD-13.1-RELEASE-amd64-disc1.iso" >&2
 			echo "	myx.common vm/create --ubuntu-lvm bb1-h3  8  8192M 120G --net lan22 52:54:20:25:20:30 ubuntu-20.04.3-live-server-amd64.iso" >&2
 			exit 1
 		fi
