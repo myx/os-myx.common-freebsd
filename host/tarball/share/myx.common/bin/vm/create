@@ -206,7 +206,7 @@ VmCreate(){
 		if [ ! -z "$VMHDD" ] ; then
 			if [ -f "/vms/$VMNAME/disk0.img" ] ; then
 		        echo "Disk type: file image: /vms/$VMNAME/disk0.img" >&2
-				if [ -z "$SHRINK" -a "$VMHDD" -lt "$(sh -c '(eval `stat -s "/vms/$VMNAME/disk0.img"` ; echo $st_size)')" ] ; then
+				if [ -z "$SHRINK" -a "$VMHDD" -lt "$(sh -c "(eval `stat -s "/vms/$VMNAME/disk0.img"` ; echo $st_size)")" ] ; then
 					echo "WARNING: Image shrink is not allowed, use --shrink-disk option, skipped... ($VMNAME)" >&2
 				else
 					truncate -c -s "$VMHDD" "/vms/$VMNAME/disk0.img"
