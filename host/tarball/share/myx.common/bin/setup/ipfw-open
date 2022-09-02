@@ -47,13 +47,13 @@ SetupIpfwOpen(){
 			# /etc/rc.firewall: setup_loopback()
 			${fwcmd} add 100 pass ip from any to any via lo0 // local internal
 			${fwcmd} add 200 deny all from any to 127.0.0.0/8
-    			${fwcmd} add 300 deny ip from 127.0.0.0/8 to any
+    		${fwcmd} add 300 deny ip from 127.0.0.0/8 to any
 			# /etc/rc.firewall: setup_ipv6_mandatory()
-			${fwcmd} add pass ipv6-icmp from :: to ff02::/16
-			${fwcmd} add pass ipv6-icmp from fe80::/10 to fe80::/10
-			${fwcmd} add pass ipv6-icmp from fe80::/10 to ff02::/16
-			${fwcmd} add pass ipv6-icmp from any to any icmp6types 1
-			${fwcmd} add pass ipv6-icmp from any to any icmp6types 2,135,136
+			${fwcmd} add 301 pass ipv6-icmp from :: to ff02::/16
+			${fwcmd} add 301 pass ipv6-icmp from fe80::/10 to fe80::/10
+			${fwcmd} add 301 pass ipv6-icmp from fe80::/10 to ff02::/16
+			${fwcmd} add 301 pass ipv6-icmp from any to any icmp6types 1
+			${fwcmd} add 301 pass ipv6-icmp from any to any icmp6types 2,135,136
 
 			${fwcmd} add 65000 allow ip from any to any
 			
