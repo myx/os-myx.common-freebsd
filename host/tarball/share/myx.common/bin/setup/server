@@ -56,6 +56,9 @@ SetupServer(){
 		ntpd_enable=YES \
 		ntpdate_enable=YES \
 		fsck_y_enable=YES
+
+	# force-setup UTC timezone
+	tzsetup UTC ; adjkerntz -a
 	
 	# Deliberately excluded:
 	#	powerd_enable=YES \
