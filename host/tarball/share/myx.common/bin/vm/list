@@ -3,7 +3,7 @@
 ##### !!! THIS SCRIPT MUST BE OVERRIDEN IN OS-DEPENDENT IMPLEMENTATION !!! #####
 
 VmList(){
-	vm list --all
+	vm list
 }
 
 case "$0" in
