@@ -26,6 +26,7 @@ SetupServer(){
 
 	myx.common setup/machine
 	
+	[ -e /boot/loader.conf ] || touch /boot/loader.conf
 	ReplaceLine /boot/loader.conf '^autoboot_delay=*' 'autoboot_delay="2"'
 	
 	myx.common tune/networkSpeed
@@ -35,6 +36,7 @@ SetupServer(){
 	# extra software
 	myx.common install/ensure/utilBashRsyncScreenSudo curl wget
 	
+	[ -e /usr/local/etc/sudoers ] || touch /usr/local/etc/sudoers
 	ReplaceLine /usr/local/etc/sudoers '^%wheel ALL=*' '%wheel ALL=(ALL) ALL'
 	
 	#
