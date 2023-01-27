@@ -13,5 +13,6 @@ test `id -u` = 0 || { echo "ERROR: $0: Must be run under root user!" >&2 ; exit 
 
 fetch https://raw.githubusercontent.com/myx/os-myx.common/master/sh-scripts/install-myx.common.sh -o - | sh -e
  
+pkg autoremove -y || true
 PAGER=cat freebsd-update --not-running-from-cron fetch install || PAGER=cat freebsd-update install || true
 pkg upgrade -y || true
