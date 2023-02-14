@@ -7,7 +7,10 @@ type UserRequireRoot >/dev/null 2>&1 || \
 
 UserRequireRoot "install/monit"
 
-pkg install -y monit
+type InstallEnsurePackage >/dev/null 2>&1 || \
+	. "/usr/local/share/myx.common/bin/lib/installEnsurePackage"
+
+InstallEnsurePackage monit
 
 cat > /usr/local/etc/monitrc <<- "EOF"
   set daemon  15
