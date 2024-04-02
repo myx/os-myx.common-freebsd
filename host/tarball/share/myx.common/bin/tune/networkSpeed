@@ -71,10 +71,12 @@ TuneNetworkSpeed(){
 	# myx.common lib/setSysctlConf net.inet.tcp.cc.algorithm cubic
 
 	if [ "`sysctl -n kern.vm_guest`" = "kvm" ] ; then
-		## KVMCLOCK
-		pkg info | grep -q -F kvmclock-kmod || pkg install -y kvmclock-kmod
-		sysrc -f /boot/loader.conf kvmclock_load="YES"
-		kldload -n kvmclock	|| true
+		## KVMCLOCK (needed only on FreeBSD below 14.0p6)
+		if pkg info | grep -q -F kvmclock-kmod || pkg search kvmclock-kmod ; then
+			pkg info | grep -q -F kvmclock-kmod || pkg install -y kvmclock-kmod
+			sysrc -f /boot/loader.conf kvmclock_load="YES"
+			kldload -n kvmclock	|| true
+		fi
 	fi
 
 }
