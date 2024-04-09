@@ -45,15 +45,24 @@ SetupIpfwOpen(){
 			${fwcmd} table all flush
 
 			# /etc/rc.firewall: setup_loopback()
-			${fwcmd} add 100 pass ip from any to any via lo0 // local internal
-			${fwcmd} add 200 deny all from any to 127.0.0.0/8
-    		${fwcmd} add 300 deny ip from 127.0.0.0/8 to any
+			${fwcmd} add 111 pass ip from any to any via lo0 // local internal
+			${fwcmd} add 111 deny all from any to 127.0.0.0/8
+    		${fwcmd} add 111 deny ip from 127.0.0.0/8 to any
+
+			# block lans through wan, if wan is present
+			if ifconfig wan 2> /dev/null > /dev/null ; then
+				${fwcmd} add 231 deny all from any to 192.168.0.0/16 via wan
+				${fwcmd} add 231 deny all from 192.168.0.0/16 to any via wan
+				${fwcmd} add 231 deny all from any to 10.0.0.0/8 via wan
+				${fwcmd} add 231 deny all from 10.0.0.0/8 to any via wan
+			fi
+
 			# /etc/rc.firewall: setup_ipv6_mandatory()
-			${fwcmd} add 301 pass ipv6-icmp from :: to ff02::/16
-			${fwcmd} add 301 pass ipv6-icmp from fe80::/10 to fe80::/10
-			${fwcmd} add 301 pass ipv6-icmp from fe80::/10 to ff02::/16
-			${fwcmd} add 301 pass ipv6-icmp from any to any icmp6types 1
-			${fwcmd} add 301 pass ipv6-icmp from any to any icmp6types 2,135,136
+			${fwcmd} add 321 pass ipv6-icmp from :: to ff02::/16
+			${fwcmd} add 321 pass ipv6-icmp from fe80::/10 to fe80::/10
+			${fwcmd} add 321 pass ipv6-icmp from fe80::/10 to ff02::/16
+			${fwcmd} add 321 pass ipv6-icmp from any to any icmp6types 1
+			${fwcmd} add 321 pass ipv6-icmp from any to any icmp6types 2,135,136
 
 			${fwcmd} add 65000 allow ip from any to any
 			
