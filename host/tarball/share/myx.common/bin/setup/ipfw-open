@@ -33,7 +33,7 @@ SetupIpfwOpen(){
 		#!/bin/sh
 	EOF
 	
-	if [ ! -s /usr/local/etc/ipfw.sh ] ; then
+	if [ ! -s /usr/local/etc/ipfw.sh ] || [ "$1" == "--force" ] ; then
 		sed -e 's/^[ \t]*//' > /usr/local/etc/ipfw.sh <<- 'EOF'
 			#!/bin/sh
 			
@@ -94,7 +94,10 @@ SetupIpfwOpen(){
 case "$0" in
 	*/myx.common/bin/setup/ipfw-open) 
 		if [ "$1" = "--help" ] ; then
-			echo "Syntax: myx.common setup/ipfw-open" >&2
+			echo "Syntax: myx.common setup/ipfw-open [--force]" >&2
+			echo "Options: " >&2
+			echo "   --force    will rewrite the /usr/local/etc/ipfw.sh (otherwise it is" >&2
+			echo "              written only when this file is empty or doesn't exist)" >&2
 			exit 1
 		fi
 		set -e
