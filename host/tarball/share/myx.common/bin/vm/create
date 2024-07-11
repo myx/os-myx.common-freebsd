@@ -113,6 +113,16 @@ VmCreate(){
 				    grub_run1="configfile (hd0,gpt2)/grub/grub.cfg"
 				EOF
 				;;
+			--uefi)
+				sed -e 's/^[ \t]*//' > "/vms/.templates/$VMNAME.conf" <<- EOF;
+				    loader="uefi"
+				    graphics="yes"
+				    graphics_res="1280x720"
+				    graphics_listen="127.0.0.1"
+				    disk0_name="disk0"
+				    disk0_dev="sparse-zvol"
+				EOF
+				;;
 				
 			*)
 				echo "ERROR: vm/create: Unknown vm type: $VMTYPE" >&2
