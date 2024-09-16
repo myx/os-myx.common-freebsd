@@ -37,8 +37,12 @@ SetupServer(){
 	myx.common install/ensure/utilBashRsyncScreenSudo curl wget
 	
 	[ -e /usr/local/etc/sudoers ] || touch /usr/local/etc/sudoers
-	ReplaceLine /usr/local/etc/sudoers '^%wheel ALL=*' '%wheel ALL=(ALL) ALL'
-	
+	[ -d /usr/local/etc/sudoers.d ] || mkdir -m 750 -p /usr/local/etc/sudoers.d
+	ReplaceLine /usr/local/etc/sudoers "^#*includedir /usr/local/etc/sudoers.d*" "@includedir /usr/local/etc/sudoers.d"
+
+	[ -e /usr/local/etc/sudoers.d/000-wheel ] || touch /usr/local/etc/sudoers.d/000-wheel
+	ReplaceLine /usr/local/etc/sudoers.d/000-wheel '^%wheel ALL=*' '%wheel ALL=(ALL) ALL'
+
 	#
 	# WTF? But still have homes that differ on 
 	# my freebsds (like its depends on ZFS/UFS)
