@@ -1,5 +1,5 @@
 bash	bash
-java	openjdk17
+java	openjdk21
 git		git		
 go		go
 nano	nano
