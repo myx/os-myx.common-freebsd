@@ -33,7 +33,7 @@ SetupIpfwOpen(){
 		#!/bin/sh
 	EOF
 	
-	if [ ! -s /usr/local/etc/ipfw.sh ] || [ "$1" == "--force" ] ; then
+	if [ ! -s /usr/local/etc/ipfw.sh ] || [ "$1" = "--force" ] ; then
 		sed -e 's/^[ \t]*//' > /usr/local/etc/ipfw.sh <<- 'EOF'
 			#!/bin/sh
 			
