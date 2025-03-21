@@ -23,8 +23,8 @@ OsInstallPostfixMTA(){
 		daily_status_include_submit_mailq="NO" \
 		daily_submit_queuerun="NO"
 
-	myx.common lib/replaceLine /usr/local/etc/postfix/main.cf '^inet_interfaces = *' 'inet_interfaces = loopback-only'
 	postconf \
+		'inet_interfaces = loopback-only' \
 		'smtp_tls_security_level = may'
 
 	newaliases
