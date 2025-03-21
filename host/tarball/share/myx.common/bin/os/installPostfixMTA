@@ -22,8 +22,11 @@ OsInstallPostfixMTA(){
 		daily_status_mail_rejects_enable="NO" \
 		daily_status_include_submit_mailq="NO" \
 		daily_submit_queuerun="NO"
-		
+
 	myx.common lib/replaceLine /usr/local/etc/postfix/main.cf '^inet_interfaces = *' 'inet_interfaces = loopback-only'
+	postconf \
+		'smtp_tls_security_level = may'
+
 	newaliases
 	service sendmail stop > /dev/null || echo "sendmail is not running (which is good)"
 	postconf compatibility_level=2 || true
