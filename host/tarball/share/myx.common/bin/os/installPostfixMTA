@@ -28,7 +28,7 @@ OsInstallPostfixMTA(){
 		'smtp_tls_security_level = may'
 
 	newaliases
-	service sendmail stop > /dev/null || echo "sendmail is not running (which is good)"
+	service sendmail onestop > /dev/null || echo "sendmail is not running (which is good)"
 	postconf compatibility_level=2 || true
 	service postfix restart
 }
