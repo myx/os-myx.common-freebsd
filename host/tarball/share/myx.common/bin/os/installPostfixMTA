@@ -10,7 +10,13 @@ UserRequireRoot "OsInstallPostfixMTA"
 OsInstallPostfixMTA(){
 	# Postfix installation
 	BATCH="YES" POSTFIX_DEFAULT_MTA="YES" pkg install -y postfix
-	
+
+	# Looks like on newer versions instead of POSTFIX_DEFAULT_MTA there is manual installation
+	mkdir -p /usr/local/etc/mail
+	if [ ! -f /usr/local/etc/mail/mailer.conf ] && [ -f /usr/local/share/postfix/mailer.conf.postfix ]; then
+		install -m 0644 /usr/local/share/postfix/mailer.conf.postfix /usr/local/etc/mail/mailer.conf
+	fi
+
 	sysrc -f /etc/rc.conf \
 		sendmail_enable=NONE \
 		sendmail_submit_enable=NO \
