@@ -8,8 +8,35 @@ type UserRequireRoot >/dev/null 2>&1 || \
 UserRequireRoot "OsInstallPostfixMTA"
 
 OsInstallPostfixMTA(){
+	# Args process
+	while true; do
+		case "$1" in
+			--relay-host)
+				shift
+				POSTFIX_RELAY_HOST="$1"
+				shift
+			;;
+			--relay-credentials)
+				shift
+				POSTFIX_RELAY_CREDENTIALS="$1"
+				shift
+			;;
+			--force-tls)
+				shift
+				POSTFIX_FORCE_TLS="YES"
+			;;
+			*)
+				break
+			;;
+		esac
+	done
+
 	# Postfix installation
-	BATCH="YES" POSTFIX_DEFAULT_MTA="YES" pkg install -y postfix
+	POSTFIX_PKG="postfix"
+	if [ -n "$POSTFIX_RELAY_CREDENTIALS" ]; then
+		POSTFIX_PKG="postfix-sasl"
+	fi
+	BATCH="YES" POSTFIX_DEFAULT_MTA="YES" pkg install -y "$POSTFIX_PKG"
 
 	# Looks like on newer versions instead of POSTFIX_DEFAULT_MTA there is manual installation
 	mkdir -p /usr/local/etc/mail
@@ -31,7 +58,23 @@ OsInstallPostfixMTA(){
 
 	postconf \
 		'inet_interfaces = loopback-only' \
-		'smtp_tls_security_level = may'
+		'smtp_tls_session_cache_database = btree:$data_directory/smtp_scache'
+
+	if [ -n "$POSTFIX_RELAY_HOST" ]; then
+		postconf "relayhost = $POSTFIX_RELAY_HOST"
+	fi
+
+	if [ -n "$POSTFIX_RELAY_CREDENTIALS" ]; then
+		postconf \
+			"smtp_sasl_auth_enable = yes" \
+			"smtp_sasl_password_maps = static:$POSTFIX_RELAY_CREDENTIALS"
+	fi
+
+	if [ "$POSTFIX_FORCE_TLS" = "YES" ]; then
+		postconf 'smtp_tls_security_level = encrypt'
+	else
+		postconf 'smtp_tls_security_level = may'
+	fi
 
 	newaliases
 	service sendmail onestop > /dev/null || echo "sendmail is not running (which is good)"
