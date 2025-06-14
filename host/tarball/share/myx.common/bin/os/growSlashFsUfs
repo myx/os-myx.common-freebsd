@@ -34,17 +34,17 @@ OsGrowSlashFsUfs(){
 			fi
 		done
 		
-		echo "ERROR: Failed: can't detect device and partition (yet)" >&2
+		echo "⛔ ERROR: Failed: can't detect device and partition (yet)" >&2
 		return 1;
 	fi
 
 	if [ "`geom disk status -s $DISK`" = "" ] ; then
-		echo "ERROR: Failed: specified disk is invalid: $DISK" >&2
+		echo "⛔ ERROR: Failed: specified disk is invalid: $DISK" >&2
 		return 1;
 	fi
 
 	if [ "`gpart status -s $PART`" = "" ] || [ "`gpart show $PART | grep freebsd-ufs`" = "" ] ; then
-		echo "ERROR: Failed: specified part is invalid (or does't contain UFS filesystem): $PART" >&2
+		echo "⛔ ERROR: Failed: specified part is invalid (or does't contain UFS filesystem): $PART" >&2
 		return 1;
 	fi
 	
@@ -60,7 +60,7 @@ OsGrowSlashFsUfs(){
 	echo "Grow: disk: $DISK, part: $PART, indx: $INDX, swap: $SWAP" >&2
 
 	if [ "$INDX" = "" ] ; then
-		echo "ERROR: Failed: can't detect partition index (yet?)" >&2
+		echo "⛔ ERROR: Failed: can't detect partition index (yet?)" >&2
 		return 1;
 	fi
 	

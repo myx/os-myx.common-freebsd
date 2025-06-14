@@ -10,7 +10,7 @@
 #
 
 echo "myx.common FreeBSD Installer started..." >&2
-test `id -u` != 0 && echo 'ERROR: Must be root!' >&2 && exit 1
+test `id -u` != 0 && echo '⛔ ERROR: Must be root!' >&2 && exit 1
 
 pkg bootstrap -y ; [ ! -z "$( pkg info | grep ca_root )" ] || pkg install -y ca_root_nss
 

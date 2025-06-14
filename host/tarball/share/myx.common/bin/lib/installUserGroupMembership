@@ -11,7 +11,7 @@ InstallUserGroupMembership(){
 	local NAME="$1"; shift;
 	local GROUPS="$@"
 
-	test ! -z "$NAME" || ( echo "ERROR: InstallUserGroupMembership: username is required!" >&2 ; exit 1 )
+	test ! -z "$NAME" || ( echo "⛔ ERROR: InstallUserGroupMembership: username is required!" >&2 ; exit 1 )
 	if test -z "$GROUPS" ; then
 		echo "WARNING: InstallUserGroupMembership: groupname is taken from username ($NAME)!" >&2
 		GROUPS="$NAME"
