@@ -217,20 +217,20 @@ VmCreate(){
 			if [ -f "/vms/$VMNAME/disk0.img" ] ; then
 		        echo "Disk type: file image: /vms/$VMNAME/disk0.img" >&2
 				if [ -z "$SHRINK" -a "$VMHDD" -lt "$(sh -c "eval '`stat -s /vms/$VMNAME/disk0.img` printenv st_size'")" ] ; then
-					echo "WARNING: Image shrink is not allowed, use --shrink-disk option, skipped... ($VMNAME)" >&2
+					echo "🙋 WARNING: Image shrink is not allowed, use --shrink-disk option, skipped... ($VMNAME)" >&2
 				else
 					truncate -c -s "$VMHDD" "/vms/$VMNAME/disk0.img"
 				fi
 			elif [ ! -z "$( zfs list | grep -e "^zroot/vms/$VMNAME/disk0\s" )" ] ; then
 		        echo "Disk type: zfs volume: zroot/vms/$VMNAME/disk0" >&2
 				if [ -z "$SHRINK" -a "$VMHDD" -lt "$(zfs get -H -p -o value volsize zroot/vms/$VMNAME/disk0)" ] ; then
-					echo "WARNING: ZFS shrink is not allowed, use --shrink-disk option, skipped... ($VMNAME)" >&2
+					echo "🙋 WARNING: ZFS shrink is not allowed, use --shrink-disk option, skipped... ($VMNAME)" >&2
 				else
 					zfs set "volsize=$VMHDD" "zroot/vms/$VMNAME/disk0"
 				fi
 			else
 		        echo "Disk type ($VMNAME): not supported / cannot detect" >&2
-		        echo "WARNING: Cannot check/modifiy disk image size, skipped... ($VMNAME)" >&2
+		        echo "🙋 WARNING: Cannot check/modifiy disk image size, skipped... ($VMNAME)" >&2
 			fi
 		fi
 
