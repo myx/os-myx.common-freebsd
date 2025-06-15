@@ -135,7 +135,7 @@ VmCreate(){
 			disk0_type="virtio-blk"				\
 		;
 		
-		if [ ! -z "$VMLAN0" ] ; then
+		if [ -n "$VMLAN0" ] ; then
 			sysrc -f "/vms/.templates/$VMNAME.conf"	\
 			    network0_type="virtio-net"			\
 				network0_switch="$VMLAN0"			\
@@ -143,7 +143,7 @@ VmCreate(){
 			;
 		fi
 		
-		if [ ! -z "$VMLAN1" ] ; then
+		if [ -n "$VMLAN1" ] ; then
 			sysrc -f "/vms/.templates/$VMNAME.conf"	\
 			    network1_type="virtio-net"			\
 				network1_switch="$VMLAN1"			\
@@ -151,7 +151,7 @@ VmCreate(){
 			;
 		fi
 		
-		if [ ! -z "$VMLAN2" ] ; then
+		if [ -n "$VMLAN2" ] ; then
 			sysrc -f "/vms/.templates/$VMNAME.conf"	\
 			    network2_type="virtio-net"			\
 				network2_switch="$VMLAN2"			\
@@ -159,7 +159,7 @@ VmCreate(){
 			;
 		fi
 		
-		if [ ! -z "$VMLAN3" ] ; then
+		if [ -n "$VMLAN3" ] ; then
 			sysrc -f "/vms/.templates/$VMNAME.conf"	\
 			    network3_type="virtio-net"			\
 				network3_switch="$VMLAN3"			\
@@ -168,8 +168,8 @@ VmCreate(){
 		fi
 		
         vm create -t "$VMNAME" -c "$VMCPUS" -m "$VMRAM" -s "$VMHDD" "$VMNAME"
-		[ ! -z "$VMMAC0" ] && sysrc -f "/vms/$VMNAME/$VMNAME.conf" network0_mac="$VMMAC0"
-		[ ! -z "$VMMAC1" ] && sysrc -f "/vms/$VMNAME/$VMNAME.conf" network0_mac="$VMMAC1"
+		[ -n "$VMMAC0" ] && sysrc -f "/vms/$VMNAME/$VMNAME.conf" network0_mac="$VMMAC0"
+		[ -n "$VMMAC1" ] && sysrc -f "/vms/$VMNAME/$VMNAME.conf" network0_mac="$VMMAC1"
 	    sysrc vm_list+="$VMNAME" 
         vm install "$VMNAME" "$VMISO"
         echo "VM created, to continue installation, run: vm console $VMNAME" >&2
@@ -181,7 +181,7 @@ VmCreate(){
 			memory="$VMRAM"						\
 		;
 
-		if [ ! -z "$VMLAN0" ] ; then
+		if [ -n "$VMLAN0" ] ; then
 			sysrc -f "/vms/$VMNAME/$VMNAME.conf"	\
 			    network0_type="virtio-net"			\
 				network0_switch="$VMLAN0"			\
@@ -189,7 +189,7 @@ VmCreate(){
 			;
 		fi
 		
-		if [ ! -z "$VMLAN1" ] ; then
+		if [ -n "$VMLAN1" ] ; then
 			sysrc -f "/vms/$VMNAME/$VMNAME.conf"	\
 			    network1_type="virtio-net"			\
 				network1_switch="$VMLAN1"			\
@@ -197,7 +197,7 @@ VmCreate(){
 			;
 		fi
 		
-		if [ ! -z "$VMLAN2" ] ; then
+		if [ -n "$VMLAN2" ] ; then
 			sysrc -f "/vms/$VMNAME/$VMNAME.conf"	\
 			    network2_type="virtio-net"			\
 				network2_switch="$VMLAN2"			\
@@ -205,7 +205,7 @@ VmCreate(){
 			;
 		fi
 		
-		if [ ! -z "$VMLAN3" ] ; then
+		if [ -n "$VMLAN3" ] ; then
 			sysrc -f "/vms/$VMNAME/$VMNAME.conf"	\
 			    network3_type="virtio-net"			\
 				network3_switch="$VMLAN3"			\
@@ -213,7 +213,7 @@ VmCreate(){
 			;
 		fi
 		
-		if [ ! -z "$VMHDD" ] ; then
+		if [ -n "$VMHDD" ] ; then
 			if [ -f "/vms/$VMNAME/disk0.img" ] ; then
 		        echo "Disk type: file image: /vms/$VMNAME/disk0.img" >&2
 				if [ -z "$SHRINK" -a "$VMHDD" -lt "$(sh -c "eval '`stat -s /vms/$VMNAME/disk0.img` printenv st_size'")" ] ; then
@@ -221,7 +221,7 @@ VmCreate(){
 				else
 					truncate -c -s "$VMHDD" "/vms/$VMNAME/disk0.img"
 				fi
-			elif [ ! -z "$( zfs list | grep -e "^zroot/vms/$VMNAME/disk0\s" )" ] ; then
+			elif [ -n "$( zfs list | grep -e "^zroot/vms/$VMNAME/disk0\s" )" ] ; then
 		        echo "Disk type: zfs volume: zroot/vms/$VMNAME/disk0" >&2
 				if [ -z "$SHRINK" -a "$VMHDD" -lt "$(zfs get -H -p -o value volsize zroot/vms/$VMNAME/disk0)" ] ; then
 					echo "🙋 WARNING: ZFS shrink is not allowed, use --shrink-disk option, skipped... ($VMNAME)" >&2
