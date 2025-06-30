@@ -25,7 +25,7 @@ InstallEnsurePackage(){
 			echo "ensure: $NAME already present, skip" >&2
 			continue
 		fi
-		LIST="$LIST `OsGetUtilityPackage "$NAME"`"
+		LIST="$LIST $( OsGetUtilityPackage "$NAME" )"
 	done
 
 	if [ -z "$LIST" ] ; then
