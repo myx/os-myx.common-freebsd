@@ -3,12 +3,12 @@
 set -e
 
 type UserRequireRoot >/dev/null 2>&1 || \
-	. "/usr/local/share/myx.common/bin/user/requireRoot"
+	. "${MYXROOT:-/usr/local/share/myx.common}/bin/user/requireRoot"
 
 UserRequireRoot "install/monit"
 
 type InstallEnsurePackage >/dev/null 2>&1 || \
-	. "/usr/local/share/myx.common/bin/lib/installEnsurePackage"
+	. "${MYXROOT:-/usr/local/share/myx.common}/bin/lib/installEnsurePackage"
 
 InstallEnsurePackage monit
 

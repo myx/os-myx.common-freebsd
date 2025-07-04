@@ -3,12 +3,12 @@
 ##### !!! THIS SCRIPT MUST BE OVERRIDEN IN OS-DEPENDENT IMPLEMENTATION !!! #####
 
 type UserRequireRoot >/dev/null 2>&1 || \
-	. "/usr/local/share/myx.common/bin/user/requireRoot"
+	. "${MYXROOT:-/usr/local/share/myx.common}/bin/user/requireRoot"
 
 UserRequireRoot "TuneNetworkSpeed"
 
 type SetSysctlConf >/dev/null 2>&1 || \
-	. "/usr/local/share/myx.common/bin/lib/setSysctlConf"
+	. "${MYXROOT:-/usr/local/share/myx.common}/bin/lib/setSysctlConf"
 
 TuneNetworkSpeed(){
 	set -e
