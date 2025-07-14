@@ -17,9 +17,6 @@ pkg bootstrap -y ; [ -n "$( pkg info | grep ca_root )" ] || pkg install -y ca_ro
 fetch https://github.com/myx/os-myx.common/archive/master.tar.gz -o - | \
 		tar zxvf - -C "/usr/local/" --include "*/host/tarball/*" --strip-components 3
 		
-fetch https://github.com/myx/os-myx.common-freebsd/archive/master.tar.gz -o - | \
-		tar zxvf - -C "/usr/local/" --include "*/host/tarball/*" --strip-components 3
-
 chown root:wheel "/usr/local/bin/myx.common"
 chmod 755 "/usr/local/bin/myx.common"
 
